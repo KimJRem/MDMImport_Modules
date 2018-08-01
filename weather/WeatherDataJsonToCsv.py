@@ -6,9 +6,9 @@ import traceback
 
 from flatten_json import flatten
 
-from mdm_logging import setup_logging
-from rabbitmq import RabbitMQProducer
-from rabbitmq.RabbitMQConsumer import RabbitMQConsumer
+from weather.mdm_logging import setup_logging
+from weather.RabbitMQProducer import RabbitMQProducer
+from weather.RabbitMQConsumer import RabbitMQConsumer
 
 setup_logging()
 logger = logging.getLogger(__name__)
@@ -54,24 +54,25 @@ consumer_config = json.dumps({
     "exchangeName": "topic_datas",
     "host": "127.0.0.1",
     "routingKey": "12",
-    "exchangeType": "direct",
+    "exchangeType": "topic",
     "queueName": "12",
     "exchangeOptions": {
-        "passive": False,
-        "durable": False,
-        "autoDelete": False,
+        "passive": True,
+        "durable": True,
+        "autoDelete": True,
         "internal": False
     },
     "queueOptions": {
-        "passive": False,
-        "durable": False,
+        "passive": True,
+        "durable": True,
         "exclusive": True,
-        "autoDelete": False
+        "autoDelete": True
     }
 })
 
 producer_config = json.dumps({
     "exchangeName": "topic_datas",
+    "exchangeType": "topic",
     "host": "127.0.0.1",
     "routingKey": "24"
 
@@ -105,6 +106,7 @@ def resolve_message(data):
 
     producer.publish(csv_data)
     logger.info('CSV file has been pushed to the queue')
+
 
 
 main()

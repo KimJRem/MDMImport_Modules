@@ -17,7 +17,8 @@ class RabbitMQProducer:
             channel = connection.channel()
 
             channel.exchange_declare(exchange=self.config['exchangeName'],
-                                     passive=False)
+                                     exchange_type=self.config['exchangeType'],
+                                     passive=True)
             channel.basic_publish(exchange=self.config['exchangeName'],
                                   routing_key=self.config['routingKey'],
                                   body=message)
