@@ -6,14 +6,14 @@ import pika
 from flatten_json import flatten
 from logging_one import *
 
-#https://stackoverflow.com/questions/50813108/get-transferred-file-name-in-rabbitmq-using-python-pika
-#for transferring csv files
+
+# https://stackoverflow.com/questions/50813108/get-transferred-file-name-in-rabbitmq-using-python-pika
+# for transferring csv files
 
 class AnalysisHelperClass:
-
     setup_logging()
 
-    #get csv and store in DF
+    # get csv and store in DF
 
     def decodeCsv(self, body):
         file_name = body.decode().split('.csv')[0]
@@ -28,11 +28,9 @@ class AnalysisHelperClass:
         df = pd.read_csv(filename, error_bad_lines=False)
         return df
 
-
     def DFToCsv(self, filename, csv_filename):
         csv = filename.to_csv(csv_filename)
         return csv
-
 
     def DFToDict(self, filename):
         dict = filename.to_dict('dict')
@@ -42,7 +40,7 @@ class AnalysisHelperClass:
         df = pd.DataFrame.from_dict(filename)
         return df
 
-    #does not work yet, prints an empty JSON, though the df is definitely not empty
+    # does not work yet, prints an empty JSON, though the df is definitely not empty
     def DFtoJSON(self, df):
         df.to_json('temp.json', orient='table')
         data = json.loads('temp.json')

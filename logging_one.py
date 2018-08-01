@@ -3,13 +3,15 @@ import json
 import logging
 import logging.config
 
-#https://fangpenlin.com/posts/2012/08/26/good-logging-practice-in-python/
-#https://docs.python.org/3/howto/logging.html
+
+# https://fangpenlin.com/posts/2012/08/26/good-logging-practice-in-python/
+# https://docs.python.org/3/howto/logging.html
 
 def setup_logging(
 
-    default_path='/Users/kim/PycharmProjects/MDMImport_Modules/logging.json',
-    default_level=logging.info,
+        # default_path='/Users/kim/PycharmProjects/MDMImport_Modules/logging.json',
+        default_path = './logging.json',
+        default_level=logging.info,
 ):
     """Setup logging configuration
 

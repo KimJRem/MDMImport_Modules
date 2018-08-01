@@ -9,11 +9,11 @@ from ConsumeRabbitMQ import *
 from PublishRabbitMQ import *
 from AnalysisHelperClass import *
 
-#https://stackoverflow.com/questions/50813108/get-transferred-file-name-in-rabbitmq-using-python-pika
-#for transferring csv files
+
+# https://stackoverflow.com/questions/50813108/get-transferred-file-name-in-rabbitmq-using-python-pika
+# for transferring csv files
 
 class TrafficStatisticalOverview:
-
     setup_logging()
 
     # dataPrep = rename
@@ -45,14 +45,14 @@ class TrafficStatisticalOverview:
 
     # do statistical operation
     def ALL_describe(self, df):
-        #stats = df.describe()# make the code more flexible - automatically insert the name of the DF
+        # stats = df.describe()# make the code more flexible - automatically insert the name of the DF
         stats = df.describe(include=[np.number])
         print('Stats return type: ')
         print(stats.dtypes)
         return stats
 
 
-#Problem da csv nicht nur einmal, sondern 12x gesendet wird. Wird das hier auch 12x gemacht.
+# Problem da csv nicht nur einmal, sondern 12x gesendet wird. Wird das hier auch 12x gemacht.
 def main():
     while True:
         logger = logging.getLogger(__name__)
@@ -66,20 +66,22 @@ def main():
         logger.info('Third')
 
         analysisTask = AnalysisHelperClass()
-        #decode csv file
+        # decode csv file
         data = analysisTask.decodeCsv(csv_data)
-        #turn csv file into DF
+        # turn csv file into DF
         df = analysisTask.csvToDF(data)
         print('Print DF: ')
         print(df)
-        #do statistical overview
+        # do statistical overview
         task = TrafficStatisticalOverview()
         renamed_DF = task.renameColumns(df)
         stats = task.ALL_describe(renamed_DF)
         print(stats)
 
-        #def DFtoJSON(self, df):
+        # def DFtoJSON(self, df):
 
         # if we want to send the result to somewhere for using
-        #then convert df to json and send json over the queue
+        # then convert df to json and send json over the queue
+
+
 main()

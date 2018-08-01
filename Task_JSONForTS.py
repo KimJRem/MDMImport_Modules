@@ -1,10 +1,11 @@
 # transform JSON to JSON format with {timestamp: value}
-#class to transform the data from both APIs into the correct format for the TSR
+# class to transform the data from both APIs into the correct format for the TSR
 import json
+
 
 class JSONForTS:
 
-#get data from RabbitMQ and transform to the format needed by the TSR
+    # get data from RabbitMQ and transform to the format needed by the TSR
 
     def transform(self):
         # wetterdaten
@@ -26,12 +27,14 @@ class JSONForTS:
         print('Print load_file: ')
         print(d1)
 
-        #make new dictionary and use values of other dict
-        d2 = {}
-        d2[d1]=
+        # make new dictionary and use values of other dict
+        # d2 = {}
+        # d2[d1]=
+
 
 def main():
     task = JSONForTS()
     task.transform()
+
 
 main()

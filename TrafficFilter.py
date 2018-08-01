@@ -9,11 +9,11 @@ from ConsumeRabbitMQ import *
 from PublishRabbitMQ import *
 from AnalysisHelperClass import *
 
-#https://stackoverflow.com/questions/50813108/get-transferred-file-name-in-rabbitmq-using-python-pika
-#for transferring csv files
+
+# https://stackoverflow.com/questions/50813108/get-transferred-file-name-in-rabbitmq-using-python-pika
+# for transferring csv files
 
 class TrafficFilter:
-
     setup_logging()
 
     # dataPrep = rename, used directly, other solution import the class
@@ -43,9 +43,9 @@ class TrafficFilter:
                          "totalParkingCapacityShortTermOverride": "ParkingCapacityShortTerm"})
             return dfFacility
 
-    #check for most popular parking space by occupancy, works before and after rename function has been applied
+    # check for most popular parking space by occupancy, works before and after rename function has been applied
     def popularParkingbyID(self, df):
-        #make
+        # make
         columnNames = list(df.head(0))
         firstColumnName = columnNames[0]
         if firstColumnName == 'parkingAreaOccupancy':
@@ -62,7 +62,8 @@ class TrafficFilter:
             i = df_filter.nlargest(4)
         return i
 
-#Problem da csv nicht nur einmal, sondern 12x gesendet wird. Wird das hier auch 12x gemacht.
+
+# Problem da csv nicht nur einmal, sondern 12x gesendet wird. Wird das hier auch 12x gemacht.
 def main():
     while True:
         logger = logging.getLogger(__name__)
@@ -77,17 +78,17 @@ def main():
 
         analysisTask = AnalysisHelperClass()
 
-        if type(csv_data) == type(dict()): #not working yet, if so only Json conversion is sensible
+        if type(csv_data) == type(dict()):  # not working yet, if so only Json conversion is sensible
             df = analysisTask.DictToDF(csv_data)
         else:
-            #decode csv file
+            # decode csv file
             data = analysisTask.decodeCsv(csv_data)
-            #turn csv file into DF
+            # turn csv file into DF
             df = analysisTask.csvToDF(data)
             print('Print DF: ')
             print(df)
 
-        #do statistical overview
+        # do statistical overview
         task = TrafficFilter()
         renamed_DF = task.renameColumns(df)
         filter = task.popularParkingbyID(renamed_DF)
@@ -95,7 +96,8 @@ def main():
         print(filter)
         print(filter.dtypes)
 
-        #if we want to send the result to somewhere for using
-        #then convert to dict and send dict, at consumer reverse again
+        # if we want to send the result to somewhere for using
+        # then convert to dict and send dict, at consumer reverse again
+
 
 main()

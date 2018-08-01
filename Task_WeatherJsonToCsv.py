@@ -1,4 +1,4 @@
-#class to transform the data from both APIs into the correct format for the TSR
+# class to transform the data from both APIs into the correct format for the TSR
 import csv
 import os.path
 from flatten_json import flatten
@@ -6,12 +6,12 @@ from logging_one import *
 from ConsumeRabbitMQ import *
 from PublishRabbitMQ import *
 
-class Task_WeatherJsonToCsv:
 
+class Task_WeatherJsonToCsv:
     setup_logging()
 
-#get data from RabbitMQ and transform to the format needed by the TSR
-#or use this functions within the ReceivedRabbitMQ class?
+    # get data from RabbitMQ and transform to the format needed by the TSR
+    # or use this functions within the ReceivedRabbitMQ class?
 
     filename = ''
 
@@ -23,11 +23,14 @@ class Task_WeatherJsonToCsv:
             filename = 'weather_data_all.csv'
             with open(filename, "a") as csvfile:
                 fileEmpty = os.stat(filename).st_size == 0
-                #main.sea_level, main.grnd_level not measured for Kassel
-                headers = ['coord_lon','coord_lat','weather_0_id','weather_0_main','weather_0_description','weather_0_icon','base',
-                           'main_temp','main_pressure','main_humidity','main_temp_min','main_temp_max','visibility',
-                           'wind_speed','wind_deg','clouds_all','rain_3h','snow_3h','dt','sys_type','sys_id','sys_message',
-                           'sys_country','sys_sunrise','sys_sunset','id','name','cod']
+                # main.sea_level, main.grnd_level not measured for Kassel
+                headers = ['coord_lon', 'coord_lat', 'weather_0_id', 'weather_0_main', 'weather_0_description',
+                           'weather_0_icon', 'base',
+                           'main_temp', 'main_pressure', 'main_humidity', 'main_temp_min', 'main_temp_max',
+                           'visibility',
+                           'wind_speed', 'wind_deg', 'clouds_all', 'rain_3h', 'snow_3h', 'dt', 'sys_type', 'sys_id',
+                           'sys_message',
+                           'sys_country', 'sys_sunrise', 'sys_sunset', 'id', 'name', 'cod']
                 writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=headers)
                 if fileEmpty:
                     print("Header is written now")
@@ -43,6 +46,7 @@ class Task_WeatherJsonToCsv:
     def getCsv(self, filename):
         with open(filename, 'rb') as csv_file:
             return filename + csv_file.read().decode()
+
 
 def main():
     while True:
@@ -74,5 +78,6 @@ def main():
         pushRabbitMDM = PublishRabbitMQ()
         pushRabbitMDM.startImport(i, routingPublish)
         logger.info('Csv was pushed to queue')
+
 
 main()
