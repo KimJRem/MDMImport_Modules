@@ -1,0 +1,8 @@
+parkingAreaOccupancy,parkingAreaReference_@targetClass,parkingAreaReference_@id,parkingAreaReference_@version,parkingAreaStatusTime,parkingAreaTotalNumberOfVacantParkingSpaces,totalParkingCapacityLongTermOverride,totalParkingCapacityShortTermOverride,SubscriptionID
+0.6161137,ParkingArea,1001[Stadtmitte],1.0,2018-08-01T18:43:00.322+02:00,1296,3376,3376,2683000
+0.61285543,ParkingArea,1001[Stadtmitte],1.0,2018-08-01T18:48:00.596+02:00,1307,3376,3376,2683000
+0.6078199,ParkingArea,1001[Stadtmitte],1.0,2018-08-01T18:53:00.351+02:00,1324,3376,3376,2683000
+0.60515404,ParkingArea,1001[Stadtmitte],1.0,2018-08-01T18:54:00.688+02:00,1333,3376,3376,2683000
+0.59804505,ParkingArea,1001[Stadtmitte],1.0,2018-08-01T19:00:00.423+02:00,1357,3376,3376,2683000
+0.5959716,ParkingArea,1001[Stadtmitte],1.0,2018-08-01T19:03:00.560+02:00,1364,3376,3376,2683000
+0.5938981,ParkingArea,1001[Stadtmitte],1.0,2018-08-01T19:05:00.808+02:00,1371,3376,3376,2683000
