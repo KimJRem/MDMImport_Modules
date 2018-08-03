@@ -1,11 +1,14 @@
 import time
 import sys
+import json
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 from pathlib import Path
 #from logging_one import *
 from mdm_logging import *
-from rabbitmq import RabbitMQProducer
+from RabbitMQProducer import *
+from RabbitMQConsumer import *
+#from rabbitmq import RabbitMQProducer
 
 setup_logging()
 logger = logging.getLogger(__name__)
@@ -60,6 +63,7 @@ def main():
 # =========================== Main start ======================================
 producer_config = json.dumps({
     "exchangeName": "topic_datas",
+    "exchangeType": "direct",
     "host": "localhost",
     "routingKey": "ab"
 

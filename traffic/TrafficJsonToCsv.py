@@ -1,13 +1,17 @@
 import os.path
 import csv
 from csv import Dialect
-
 import pika
-from flatten_json import flatten
+import json
+import unicodecsv
 
-from mdm_logging import *
+from flatten_json import flatten
 from rabbitmq import RabbitMQProducer
 from rabbitmq.RabbitMQConsumer import RabbitMQConsumer
+from mdm_logging import *
+from RabbitMQConsumer import *
+from RabbitMQProducer import *
+import sys
 
 setup_logging()
 logger = logging.getLogger(__name__)
@@ -23,46 +27,20 @@ class TrafficJsonToCsv:
         # filename = 'mdm_data_parkingArea.csv'
         global filenameArea
         filenameArea = 'mdm_data_parkingArea.csv'
-        with open(r'mdm_data_parkingArea.csv', "a") as csvfile:
+        with open(filenameArea, "a", encoding='utf-8') as csvfile:
         #with open(filenameArea, 'rwb') as csvfile:
             fileEmpty = os.stat(filenameArea).st_size == 0
             headers = list(data)
-            writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=headers, dialect=Dialect.escapechar)
+            writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=headers)
             if fileEmpty:
                 # print("Header is written now")
                 logger.info('Header is written now')
                 writer.writeheader()  # file doesn't exist yet, write a header
-            print(data)
+            #cannot deal with the letter "ö" in Wilhelmshöhe
             writer.writerow(data)
             # print('Received one set of data')
             logger.info('Received one set of data')
         csvfile.close()
-
-    def JSONtoCsvArea2(self, **data):
-        global filenameArea
-        filenameArea = 'mdm_data_parkingArea.csv'
-        with open(filenameArea, "w", newline='') as csvfile:
-            fileEmpty = os.stat(filenameArea).st_size == 0
-            headers = list(data)
-            writer = csv.writer(csvfile)
-            if fileEmpty:
-                writer.writerow([headers])
-            writer.writerow(data)
-            # print('Received one set of data')
-            logger.info('Received one set of data')
-
-    def JSONtoCsvFacility2(self, **data):
-        global filenameFacility
-        filenameFacility = 'mdm_data_parkingFacility.csv'
-        with open(filenameFacility, "w", newline='') as csvfile:
-            fileEmpty = os.stat(filenameFacility).st_size == 0
-            headers = list(data)
-            writer = csv.writer(csvfile)
-            if fileEmpty:
-                writer.writerow([headers])
-            writer.writerow(data)
-            # print('Received one set of data')
-            logger.info('Received one set of data')
 
     def JSONtoCsvFacility(self, **data):
         logger = logging.getLogger(__name__)
@@ -70,7 +48,7 @@ class TrafficJsonToCsv:
         global filenameFacility
         filenameFacility = 'mdm_data_parkingFacility.csv'
         #with open(filenameFacility, "ab") as csvfile:
-        with open('mdm_data_parkingFacility.csv', 'rb') as csvfile:
+        with open(filenameFacility, 'a', encoding='utf-8') as csvfile:
             fileEmpty = os.stat(filenameFacility).st_size == 0
             headers = list(data)
             writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=headers)
@@ -102,17 +80,19 @@ consumer_config = json.dumps({
     "queueOptions": {
         "passive": False,
         "durable": False,
-        "exclusive": True,
+        "exclusive": False,
         "autoDelete": False
     }
 })
 
 producer_config = json.dumps({
     "exchangeName": "topic_datas",
+    "exchangeType": "direct",
     "host": "localhost",
     "routingKey": "cd"
 
 })
+
 producer = RabbitMQProducer(json.loads(producer_config))
 
 filenameArea = None
@@ -136,11 +116,11 @@ def resolve_message(data):
 
     if k < 11:
         json_data = json.loads(data)
+        #a = task.byteify(json_data)
         x = flatten(json_data)
         firstkey = list(x.keys())[0]
         # taskOne = Task_JsonCsv()
         if firstkey == 'parkingAreaOccupancy':
-            print('Hallodsidhkkbwe')
             print(x)
             task.JSONtoCsvArea(**x)
             logger.info('Stored data in csvArea')

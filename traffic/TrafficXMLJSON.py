@@ -1,8 +1,11 @@
 import xmltodict
 import json
+
+#from rabbitmq import RabbitMQProducer
+#from rabbitmq.RabbitMQConsumer import RabbitMQConsumer
+from RabbitMQProducer import *
+from RabbitMQConsumer import *
 from mdm_logging import *
-from rabbitmq import RabbitMQProducer
-from rabbitmq.RabbitMQConsumer import RabbitMQConsumer
 
 setup_logging()
 logger = logging.getLogger(__name__)
@@ -53,7 +56,7 @@ consumer_config = json.dumps({
     "host": "localhost",
     "routingKey": "ab",
     "exchangeType": "direct",
-    "queueName": "12",
+    "queueName": "ab",
     "exchangeOptions": {
         "passive": False,
         "durable": False,
@@ -63,13 +66,14 @@ consumer_config = json.dumps({
     "queueOptions": {
         "passive": False,
         "durable": False,
-        "exclusive": True,
+        "exclusive": False,
         "autoDelete": False
     }
 })
 
 producer_config = json.dumps({
     "exchangeName": "topic_datas",
+    "exchangeType": "direct",
     "host": "localhost",
     "routingKey": "bc"
 
