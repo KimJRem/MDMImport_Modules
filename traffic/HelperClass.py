@@ -5,7 +5,7 @@ import pandas as pd
 import json
 import pika
 from flatten_json import flatten
-from mdm_logging import *
+from traffic.mdm_logging import *
 
 # https://stackoverflow.com/questions/50813108/get-transferred-file-name-in-rabbitmq-using-python-pika
 # for transferring csv files
