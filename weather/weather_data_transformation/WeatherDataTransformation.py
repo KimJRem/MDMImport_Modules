@@ -1,11 +1,91 @@
 import datetime
+import logging
+import logging.config
+import pika
+import json
+import os.path
+import pandas as pd
 
-from AnalysisHelperClass import *
+
 # https://stackoverflow.com/questions/50813108/get-transferred-file-name-in-rabbitmq-using-python-pika
 # for transferring csv files
-from rabbitmq import RabbitMQConsumer
+def setup_logging(
+        default_path='./logging.json',
+        default_level=logging.INFO):
+    """Setup logging configuration
 
-setup_logging()
+    """
+    path = default_path
+    if os.path.exists(path):
+        with open(path, 'rt') as f:
+            config = json.load(f)
+        logging.config.dictConfig(config)
+    else:
+        logging.basicConfig(level=default_level)
+
+
+class RabbitMQConsumer:
+    """RabbitMQ Consumer Implementation in Python"""
+
+    def __init__(self, config):
+        # Initialize the consumer with the available configs of rabbitMQ
+        self.config = config
+
+    def __enter__(self):
+        # Open the connection
+        self.connection = self._create_connection()
+        return self
+
+    def __exit__(self, *args):
+        # Close the connection
+        self.connection.close()
+
+    def consume(self, message_received_callback):
+        # Consume message. It tells the broker to spin up a consumer process, which checks for messages
+        # on a specified queue, and then registers a callback function. The callback function should be executed
+        # when a message is available and has been delivered to the client.
+        self.message_received_callback = message_received_callback
+
+        channel = self.connection.channel()
+
+        self._create_exchange(channel)
+        self._create_queue(channel)
+
+        channel.queue_bind(queue=self.config['queueName'],
+                           exchange=self.config['exchangeName'],
+                           routing_key=self.config['routingKey'])
+
+        channel.basic_consume(self._consume_message, queue=self.config['queueName'])
+        channel.start_consuming()
+
+    def _create_exchange(self, channel):
+        # Declare the exchange using the given communication channel
+        exchange_options = self.config['exchangeOptions']
+        channel.exchange_declare(exchange=self.config['exchangeName'],
+                                 exchange_type=self.config['exchangeType'],
+                                 passive=exchange_options['passive'],
+                                 durable=exchange_options['durable'],
+                                 auto_delete=exchange_options['autoDelete'],
+                                 internal=exchange_options['internal'])
+
+    def _create_queue(self, channel):
+        # Create the queue to pick up the messages directly from the queue
+        queue_options = self.config['queueOptions']
+        channel.queue_declare(queue=self.config['queueName'],
+                              passive=queue_options['passive'],
+                              durable=queue_options['durable'],
+                              exclusive=queue_options['exclusive'],
+                              auto_delete=queue_options['autoDelete'])
+
+    def _create_connection(self):
+        # Open a new connection if it is not existing
+        parameters = pika.ConnectionParameters(host=self.config['host'])
+        return pika.BlockingConnection(parameters)
+
+    def _consume_message(self, channel, method, properties, body):
+        # Callback function that will be executed
+        self.message_received_callback(body)
+        channel.basic_ack(delivery_tag=method.delivery_tag)
 
 
 class WeatherDataTransformation:
@@ -63,6 +143,24 @@ def describe(df, column_name):
     return df[column_name].describe()
 
 
+def decode_csv(body):
+    file_name = body.decode().split('.csv')[0]
+    message = body.decode().split('.csv')[1]
+    filename = '{}.csv'.format(file_name)
+    with open(filename, 'w') as write_csv:
+        # with open('{}.csv'.format(file_name), 'w') as write_csv:
+        write_csv.write(message)
+    return filename
+
+
+def csv_to_df(filename):
+    df = pd.read_csv(filename, error_bad_lines=False)
+    return df
+
+
+setup_logging()
+logger = logging.getLogger(__name__)
+
 consumer_config = json.dumps({
     "exchangeName": "topic_datas",
     "host": "127.0.0.1",
@@ -85,22 +183,22 @@ consumer_config = json.dumps({
 
 
 def main():
-    with RabbitMQConsumer(json.loads(consumer_config)) as consumer:
-        consumer.consume(extract_data)
+    while True:
+        with RabbitMQConsumer(json.loads(consumer_config)) as consumer:
+            consumer.consume(extract_data)
 
 
 def extract_data(csv_data):
-    analysis_task = AnalysisHelperClass()
     # decode csv file
-    data = analysis_task.decodeCsv(csv_data)
+    data = decode_csv(csv_data)
     # turn csv file into DF
-    df = analysis_task.csvToDF(data)
+    df = csv_to_df(data)
     print('Print DF: ')
-    print(df)
+    logger.info(df)
     # do statistical overview
     task = WeatherDataTransformation(df)
     data_prep_df = task.weather_api_data_prep()
-    print(data_prep_df)
+    logger.info(data_prep_df)
 
     extract_min_max(data_prep_df)
     extract_statistical_overview(data_prep_df)
@@ -108,20 +206,21 @@ def extract_data(csv_data):
 
 def extract_min_max(data_prep):
     all_min_max_value = all_min_max(data_prep)
-    print(
+    logger.info(
         'The maximum values are: \n%s. \nThe minimum values are: \n%s.' % (all_min_max_value[0], all_min_max_value[1]))
 
     max_min_value = min_max(data_prep, 'Wind_speed')
-    print(
+    logger.info(
         'The maximum value of the selected column is: \n%s. \nThe minimum value of the selected column is: \n%s.' % (
             max_min_value[0], max_min_value[1]))
 
 
 def extract_statistical_overview(data_prep):
     stats = all_describe(data_prep)
-    print(stats)
+    logger.info(stats)
     column_stats = describe(data_prep, 'Temp_Celsius')
     print(column_stats)
 
 
-main()
+if __name__ == "__main__":
+    main()
