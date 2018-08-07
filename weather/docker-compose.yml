@@ -1,0 +1,41 @@
+version: '3'
+services:
+  rabbitmq:
+    hostname: "rabbit"
+    image: "rabbitmq:latest"
+    container_name: "rabbitmq"
+    ports:
+    - "5672:5672"
+
+  weather-api:
+    container_name: "weather-api"
+    build:
+      context: weather_api
+      dockerfile: weather_api/Dockerfile
+    tty: true
+    depends_on:
+    - "rabbitmq"
+    volumes:
+    - ./weather-api:/usr/src/app
+
+  weather-data-csv:
+    container_name: "weather-data-csv"
+    build:
+      context: weather_data_csv
+      dockerfile: weather_data_csv/Dockerfile
+    tty: true
+    depends_on:
+    - "rabbitmq"
+    volumes:
+    - ./weather-data-csv:/usr/src/app
+
+  weather-data-transformation:
+    container_name: "weather-data-transformation"
+    build:
+      context: weather_data_transformation
+      dockerfile: weather_data_transformation/Dockerfile
+    tty: true
+    depends_on:
+    - "rabbitmq"
+    volumes:
+    - ./weather-data-transformation:/usr/src/app
