@@ -1,16 +1,30 @@
 import time
 import sys
+import os
+import logging
+import logging.config
 import json
+import pika
+import traceback
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
-from traffic.RabbitMQProducer import RabbitMQProducer
-from traffic.mdm_logging import *
-
-setup_logging()
-logger = logging.getLogger(__name__)
 
 # the code was mostly taken from here:
 # http://brunorocha.org/python/watching-a-directory-for-file-changes-with-python.html?utm_content=bufferddcb9&utm_source=buffer&utm_medium=twitter&utm_campaign=Buffer
+
+def setup_logging(
+        default_path='./logging.json',
+        default_level=logging.INFO):
+    """Setup logging configuration
+
+    """
+    path = default_path
+    if os.path.exists(path):
+        with open(path, 'rt') as f:
+            config = json.load(f)
+        logging.config.dictConfig(config)
+    else:
+        logging.basicConfig(level=default_level)
 
 class MyHandler(PatternMatchingEventHandler):
 
@@ -46,6 +60,40 @@ class MyHandler(PatternMatchingEventHandler):
             logger.error('Created event occurred but def process could not be started ')
             raise
 
+class RabbitMQProducer:
+    """ RabbitMQ Producer Implementation in Python"""
+
+    def __init__(self, config):
+        # Initialize the consumer with the available configs of rabbitMQ
+        self.config = config
+
+    def publish(self, message):
+        # Publish message to an exchange by setting up a communication channel
+        connection = None
+        try:
+            connection = self._create_connection()
+            channel = connection.channel()
+
+            channel.exchange_declare(exchange=self.config['exchangeName'],
+                                     exchange_type=self.config['exchangeType'],
+                                     passive=True)
+            channel.basic_publish(exchange=self.config['exchangeName'],
+                                  routing_key=self.config['routingKey'],
+                                  body=message)
+
+            print(" [x] Sent message %r" % message)
+        except Exception as e:
+            print(repr(e))
+            traceback.print_exc()
+            raise e
+        finally:
+            if connection:
+                connection.close()
+
+    def _create_connection(self):
+        # Establish a connection with the RabbitMQ server
+        parameters = pika.ConnectionParameters(host=self.config['host'])
+        return pika.BlockingConnection(parameters)
 
 def main():
     newObserver = Observer()
@@ -57,10 +105,13 @@ def main():
 
 
 # =========================== Main start ======================================
+setup_logging()
+logger = logging.getLogger(__name__)
+
 producer_config = json.dumps({
     "exchangeName": "topic_datas",
     "exchangeType": "direct",
-    "host": "localhost",
+    "host": "rabbitmq",
     "routingKey": "ab"
 
 })

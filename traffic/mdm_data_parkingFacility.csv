@@ -1,0 +1,23 @@
+parkingFacilityOccupancy,parkingFacilityOccupancyTrend,parkingFacilityReference_@targetClass,parkingFacilityReference_@id,parkingFacilityReference_@version,parkingFacilityStatus,parkingFacilityStatusTime,totalNumberOfOccupiedParkingSpaces,totalNumberOfVacantParkingSpaces,totalParkingCapacityOverride,totalParkingCapacityShortTermOverride,SubscriptionID
+0.66818184,increasing,ParkingFacility,7[City Point],1.0,open,2018-08-03T17:34:00.128+02:00,147,73,220,220,2683000
+1.0,ParkingFacility,6[Theaterplatz],1.0,statusUnknown,2018-08-03T17:34:00.128+02:00,228,0,228,228,2683000
+0.64081633,ParkingFacility,1[Friedrichsplatz],1.0,open,2018-08-03T17:34:00.128+02:00,628,352,980,980,2683000
+0.3136646,ParkingFacility,4[Wilhelmsstraße],1.0,open,2018-08-03T17:34:00.128+02:00,101,221,322,322,2683000
+0.28225806,ParkingFacility,2[Kurfürsten Galerie],1.0,open,2018-08-03T17:34:00.128+02:00,175,445,620,620,2683000
+0.7785235,ParkingFacility,5[Rathaus],1.0,open,2018-08-03T17:34:00.128+02:00,232,66,298,298,2683000
+0.27234042,ParkingFacility,10[Galeria Kaufhof],1.0,open,2018-08-03T17:34:00.128+02:00,64,171,235,235,2683000
+0.17699115,ParkingFacility,9[Martinskirche],1.0,open,2018-08-03T17:34:00.128+02:00,20,93,113,113,2683000
+0.9027778,ParkingFacility,3[Garde-du-Corps],1.0,open,2018-08-03T17:34:00.128+02:00,325,35,360,360,2683000
+0.35333332,ParkingFacility,8[Atrium],1.0,open,2018-08-03T17:34:00.128+02:00,53,97,150,150,2683000
+0.65,ParkingFacility,7[City Point],1.0,open,2018-08-03T17:54:00.819+02:00,143,77,220,220,2683000
+1.0,ParkingFacility,6[Theaterplatz],1.0,statusUnknown,2018-08-03T17:54:00.819+02:00,228,0,228,228,2683000
+0.65816325,ParkingFacility,1[Friedrichsplatz],1.0,open,2018-08-03T17:54:00.819+02:00,645,335,980,980,2683000
+0.33229813,ParkingFacility,4[Wilhelmsstraße],1.0,open,2018-08-03T17:54:00.819+02:00,107,215,322,322,2683000
+0.27419356,ParkingFacility,2[Kurfürsten Galerie],1.0,open,2018-08-03T17:54:00.819+02:00,170,450,620,620,2683000
+0.77516776,ParkingFacility,5[Rathaus],1.0,open,2018-08-03T17:54:00.819+02:00,231,67,298,298,2683000
+0.30638298,ParkingFacility,10[Galeria Kaufhof],1.0,open,2018-08-03T17:54:00.819+02:00,72,163,235,235,2683000
+0.15044248,ParkingFacility,9[Martinskirche],1.0,open,2018-08-03T17:54:00.819+02:00,17,96,113,113,2683000
+0.89444447,ParkingFacility,3[Garde-du-Corps],1.0,open,2018-08-03T17:54:00.819+02:00,322,38,360,360,2683000
+0.33333334,ParkingFacility,8[Atrium],1.0,open,2018-08-03T17:54:00.819+02:00,50,100,150,150,2683000
+0.65816325,ParkingFacility,1[Friedrichsplatz],1.0,open,2018-08-03T17:55:00.624+02:00,645,335,980,980,2683000
+0.33333334,ParkingFacility,8[Atrium],1.0,open,2018-08-03T17:55:00.624+02:00,50,100,150,150,2683000

@@ -1,0 +1,96 @@
+version: '3'
+services:
+  rabbitmq:
+    hostname: "rabbit"
+    image: "rabbitmq:latest"
+    container_name: "rabbitmq"
+    ports:
+    - "5672:5672"
+
+  mdm_importer:
+    container_name: "MDMImporter"
+    build:
+      context: /Users/kim/MDMImporter
+      dockerfile: Dockerfile
+    tty: true
+    depends_on:
+    - "rabbitmq"
+    volumes:
+    - type: volume
+    - source: output
+    - target: /data
+    #- ./MDMImporter:/usr/src/app
+    #- shared-volume:/usr/src/app
+    #- ./MDMImporter:/var/output
+
+  traffic_one:
+    container_name: "traffic_one"
+    build:
+      context: traffic_one
+      dockerfile: Dockerfile
+    tty: true
+    depends_on:
+    - "rabbitmq"
+    volumes:
+    - ./traffic_one:/usr/src/app
+    #- shared-volume:/usr/src/app
+    - MDMImporter:/data
+
+
+  traffic_two:
+    container_name: "traffic_two"
+    build:
+      context: traffic_two
+      dockerfile: Dockerfile
+    tty: true
+    depends_on:
+    - "rabbitmq"
+    volumes:
+    - ./traffic_two:/usr/src/app
+
+  traffic_three:
+    container_name: "traffic_three"
+    build:
+      context: traffic_three
+      dockerfile: Dockerfile
+    tty: true
+    depends_on:
+    - "rabbitmq"
+    volumes:
+    - ./traffic_three:/usr/src/app
+
+  traffic_four:
+    container_name: "traffic_four"
+    build:
+      context: traffic_four
+      dockerfile: Dockerfile
+    stdin_open: true
+    tty: true
+    depends_on:
+    - "rabbitmq"
+    volumes:
+    - ./traffic_four:/usr/src/app
+
+  traffic_five:
+    container_name: "traffic_five"
+    build:
+      context: traffic_five
+      dockerfile: Dockerfile
+    tty: true
+    depends_on:
+    - "rabbitmq"
+    volumes:
+    - ./traffic_five:/usr/src/app
+
+  traffic_six:
+    container_name: "traffic_six"
+    build:
+      context: traffic_six
+      dockerfile: Dockerfile
+    tty: true
+    depends_on:
+    - "rabbitmq"
+    volumes:
+    - ./traffic_six:/usr/src/app
+volumes:
+  output:
