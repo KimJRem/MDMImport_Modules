@@ -1,0 +1,10 @@
+Importer:
+  SubscriptionID: 2683000
+  ResultHandler:
+    - SaveToFileHandler:
+        outputPath: "./output/"
+    - SendToConverterHandler:
+        xmlPath: "d2LogicalModel/payloadPublication/siteMeasurements"
+        converterLocation: "http://localhost:4568"
+        converterOutput: "csv"
+        safeResultToFile: "./output/"

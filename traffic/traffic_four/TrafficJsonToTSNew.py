@@ -202,4 +202,5 @@ def resolve_message(data):
     producer.publish(i)
     logger.info('Json has been pushed to queue')
 
-main()
+if __name__ == "__main__":
+    main()

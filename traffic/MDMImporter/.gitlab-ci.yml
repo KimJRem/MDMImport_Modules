@@ -1,0 +1,27 @@
+stages:
+  - build
+  - package
+
+build:
+  image: maven:3.5.2-jdk-8-alpine
+  stage: build
+  script:
+    - mvn package
+  artifacts:
+    paths:
+      - target/MDMImporter-jar-with-dependencies.jar
+    expire_in: 1 hour
+  only:
+    - master
+
+build-image:
+  stage: package
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker login -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_TOKEN $DOCKER_REGISTRY_URL
+    - docker build -t $DOCKER_REGISTRY_URL/mdmimporter:latest .
+    - docker push $DOCKER_REGISTRY_URL/mdmimporter:latest
+  only:
+    - master

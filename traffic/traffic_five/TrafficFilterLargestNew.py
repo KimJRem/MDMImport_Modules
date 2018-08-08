@@ -234,4 +234,5 @@ def resolve_message(data):
     print(filter)
     logger.info('Filter has been applied to the data set')
 
-main()
+if __name__ == "__main__":
+    main()

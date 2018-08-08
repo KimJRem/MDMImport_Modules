@@ -96,13 +96,24 @@ class RabbitMQProducer:
         return pika.BlockingConnection(parameters)
 
 def main():
+
     newObserver = Observer()
+    print(os.listdir("/usr/src/app"))
     # path of directory to look for needs to inserted in the command line
-    newObserver.schedule(MyHandler(), path='/Users/kim/MDMImporter/output')
+    newObserver.schedule(MyHandler(), path='/usr/src/app/output')
+
     newObserver.start()
 
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        newObserver.stop()
+
+    newObserver.join()
 
 
+#/MDMImporter/output'
 
 # =========================== Main start ======================================
 setup_logging()
@@ -118,4 +129,5 @@ producer_config = json.dumps({
 
 producer = RabbitMQProducer(json.loads(producer_config))
 
-main()
+if __name__ == "__main__":
+    main()

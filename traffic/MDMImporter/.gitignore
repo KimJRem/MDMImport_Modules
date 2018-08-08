@@ -1,0 +1,9 @@
+/target/
+/local_resources/*
+/out/
+/output/
+/certificates/
+/libraries/
+.idea
+
+*.iml

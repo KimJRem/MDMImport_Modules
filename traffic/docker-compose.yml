@@ -1,27 +1,22 @@
 version: '3'
 services:
   rabbitmq:
-    hostname: "rabbit"
+    hostname: "rabbitmq"
     image: "rabbitmq:latest"
     container_name: "rabbitmq"
     ports:
-    - "5672:5672"
+      - "5672:5672"
 
   mdm_importer:
-    container_name: "MDMImporter"
+    container_name: "mdm_importer"
     build:
       context: /Users/kim/MDMImporter
       dockerfile: Dockerfile
     tty: true
     depends_on:
-    - "rabbitmq"
+      - "rabbitmq"
     volumes:
-    - type: volume
-    - source: output
-    - target: /data
-    #- ./MDMImporter:/usr/src/app
-    #- shared-volume:/usr/src/app
-    #- ./MDMImporter:/var/output
+      - mdm-volume:/app
 
   traffic_one:
     container_name: "traffic_one"
@@ -30,12 +25,9 @@ services:
       dockerfile: Dockerfile
     tty: true
     depends_on:
-    - "rabbitmq"
+      - "rabbitmq"
     volumes:
-    - ./traffic_one:/usr/src/app
-    #- shared-volume:/usr/src/app
-    - MDMImporter:/data
-
+      - mdm-volume:/usr/src/app
 
   traffic_two:
     container_name: "traffic_two"
@@ -44,9 +36,9 @@ services:
       dockerfile: Dockerfile
     tty: true
     depends_on:
-    - "rabbitmq"
+      - "rabbitmq"
     volumes:
-    - ./traffic_two:/usr/src/app
+      - ./traffic_two:/usr/src/app
 
   traffic_three:
     container_name: "traffic_three"
@@ -55,9 +47,9 @@ services:
       dockerfile: Dockerfile
     tty: true
     depends_on:
-    - "rabbitmq"
+      - "rabbitmq"
     volumes:
-    - ./traffic_three:/usr/src/app
+      - ./traffic_three:/usr/src/app
 
   traffic_four:
     container_name: "traffic_four"
@@ -67,9 +59,9 @@ services:
     stdin_open: true
     tty: true
     depends_on:
-    - "rabbitmq"
+      - "rabbitmq"
     volumes:
-    - ./traffic_four:/usr/src/app
+      - ./traffic_four:/usr/src/app
 
   traffic_five:
     container_name: "traffic_five"
@@ -78,9 +70,9 @@ services:
       dockerfile: Dockerfile
     tty: true
     depends_on:
-    - "rabbitmq"
+      - "rabbitmq"
     volumes:
-    - ./traffic_five:/usr/src/app
+      - ./traffic_five:/usr/src/app
 
   traffic_six:
     container_name: "traffic_six"
@@ -89,8 +81,10 @@ services:
       dockerfile: Dockerfile
     tty: true
     depends_on:
-    - "rabbitmq"
+      - "rabbitmq"
     volumes:
-    - ./traffic_six:/usr/src/app
+      - ./traffic_six:/usr/src/app
+
+
 volumes:
-  output:
+  mdm-volume:

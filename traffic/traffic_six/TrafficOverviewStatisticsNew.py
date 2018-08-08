@@ -214,4 +214,5 @@ def resolve_message(data):
     print(stats)
     logger.info('Statistical overview for DF has been supplied')
 
-main()
+if __name__ == "__main__":
+    main()
