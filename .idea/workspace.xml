@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="192e3d9e-19e9-4415-8732-79d6e4722c32" name="Default" comment="" />
+    <list default="true" id="192e3d9e-19e9-4415-8732-79d6e4722c32" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/weather/weather_api/wait-for-it.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weather/weather_data_csv/wait-for-it.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/weather/weather_data_transformation/wait-for-it.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weather/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/weather/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weather/weather_api/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/weather/weather_api/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weather/weather_api/WeatherAPIClient.py" beforeDir="false" afterPath="$PROJECT_DIR$/weather/weather_api/WeatherAPIClient.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weather/weather_data_csv/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/weather/weather_data_csv/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weather/weather_data_csv/WeatherDataJsonToCsv.py" beforeDir="false" afterPath="$PROJECT_DIR$/weather/weather_data_csv/WeatherDataJsonToCsv.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weather/weather_data_csv/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/weather/weather_data_csv/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weather/weather_data_transformation/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/weather/weather_data_transformation/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/weather/weather_data_transformation/WeatherDataTransformation.py" beforeDir="false" afterPath="$PROJECT_DIR$/weather/weather_data_transformation/WeatherDataTransformation.py" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -12,56 +25,60 @@
     <session id="1839991686">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="5" />
+          <entry key="project.closed" value="6" />
+          <entry key="project.open.time.12" value="1" />
           <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.15" value="1" />
           <entry key="project.open.time.17" value="1" />
           <entry key="project.open.time.21" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="5" />
+          <entry key="project.open.time.9" value="1" />
+          <entry key="project.opened" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="Dockerfile" value="3" />
+          <entry key="Dockerfile" value="8" />
           <entry key="csv" value="4" />
           <entry key="gitattributes" value="1" />
-          <entry key="gitignore" value="2" />
-          <entry key="json" value="7" />
+          <entry key="gitignore" value="3" />
+          <entry key="json" value="8" />
           <entry key="log" value="2" />
-          <entry key="py" value="97" />
-          <entry key="txt" value="4" />
-          <entry key="yml" value="2" />
+          <entry key="py" value="104" />
+          <entry key="sh" value="4" />
+          <entry key="txt" value="10" />
+          <entry key="yml" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Dockerfile" value="3" />
-          <entry key="Git file" value="2" />
-          <entry key="JSON" value="7" />
-          <entry key="PLAIN_TEXT" value="11" />
-          <entry key="Python" value="97" />
-          <entry key="YAML" value="2" />
+          <entry key="Bash" value="4" />
+          <entry key="Dockerfile" value="8" />
+          <entry key="Git file" value="3" />
+          <entry key="JSON" value="8" />
+          <entry key="PLAIN_TEXT" value="17" />
+          <entry key="Python" value="104" />
+          <entry key="YAML" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="Dockerfile" value="118" />
+          <entry key="Dockerfile" value="176" />
           <entry key="Python Console" value="6" />
           <entry key="dummy" value="52" />
           <entry key="gitignore" value="5" />
-          <entry key="py" value="6018" />
-          <entry key="txt" value="31" />
-          <entry key="yml" value="200" />
+          <entry key="py" value="6125" />
+          <entry key="txt" value="58" />
+          <entry key="yml" value="333" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Dockerfile" value="118" />
+          <entry key="Dockerfile" value="176" />
           <entry key="Git file" value="5" />
-          <entry key="PLAIN_TEXT" value="83" />
-          <entry key="Python" value="6024" />
-          <entry key="YAML" value="200" />
+          <entry key="PLAIN_TEXT" value="110" />
+          <entry key="Python" value="6131" />
+          <entry key="YAML" value="333" />
         </counts>
       </usages-collector>
     </session>
@@ -70,7 +87,97 @@
     <favorites_list name="MDMImport_Modules" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/weather/docker-compose.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="631">
+              <caret line="37" column="28" lean-forward="true" selection-start-line="37" selection-start-column="28" selection-end-line="37" selection-end-column="28" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/weather/weather_data_transformation/Dockerfile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="10" selection-start-line="10" selection-end-line="10" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/weather/weather_data_csv/Dockerfile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="180">
+              <caret line="10" column="39" selection-start-line="10" selection-start-column="39" selection-end-line="10" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/weather/weather_api/WeatherAPIClient.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="162">
+              <caret line="53" column="26" lean-forward="true" selection-start-line="53" selection-start-column="26" selection-end-line="53" selection-end-column="26" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/weather/weather_api/Dockerfile">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="144">
+              <caret line="8" column="8" lean-forward="true" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/weather/weather_api/logging.json">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/weather/weather_api/requirements.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="18">
+              <caret line="1" column="4" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/weather/weather_data_csv/WeatherDataJsonToCsv.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-719">
+              <caret line="146" column="40" selection-start-line="146" selection-start-column="40" selection-end-line="146" selection-end-column="40" />
+              <folding>
+                <element signature="e#0#10#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/weather/weather_data_transformation/WeatherDataTransformation.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="469">
+              <caret line="202" column="33" lean-forward="true" selection-start-line="202" selection-start-column="33" selection-end-line="202" selection-end-column="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/weather/weather_data_transformation/requirements.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="18">
+              <caret line="1" column="4" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -91,16 +198,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/ConsumeRabbitMQ_New.py" />
-        <option value="$PROJECT_DIR$/XMLJSON.py" />
-        <option value="$PROJECT_DIR$/JsonToCsv.py" />
-        <option value="$PROJECT_DIR$/XmlToJson.py" />
-        <option value="$PROJECT_DIR$/Task_listenAPI.py" />
-        <option value="$PROJECT_DIR$/ConsumeRabbitMQ.py" />
-        <option value="$PROJECT_DIR$/CleanTrafficdata.py" />
-        <option value="$PROJECT_DIR$/Task_CsvDF.py" />
-        <option value="$PROJECT_DIR$/Weather_dataPrep.py" />
-        <option value="$PROJECT_DIR$/WeatherStatisticalOverview.py" />
         <option value="$PROJECT_DIR$/WeatherMinMax.py" />
         <option value="$PROJECT_DIR$/Task_JoinWeatherTraffic.py" />
         <option value="$PROJECT_DIR$/TrafficRenameColumns.py" />
@@ -141,7 +238,17 @@
         <option value="$PROJECT_DIR$/weather_data_transformation/WeatherDataTransformation.py" />
         <option value="$PROJECT_DIR$/weather_data_transformation/Dockerfile" />
         <option value="$PROJECT_DIR$/docker-compose.yml" />
+        <option value="$PROJECT_DIR$/weather/weather_api/requirements.txt" />
+        <option value="$PROJECT_DIR$/weather/weather_data_csv/requirements.txt" />
+        <option value="$PROJECT_DIR$/weather/weather_data_transformation/requirements.txt" />
+        <option value="$PROJECT_DIR$/weather/weather_api/wait-for-it.sh" />
+        <option value="$PROJECT_DIR$/weather/weather_data_transformation/Dockerfile" />
+        <option value="$PROJECT_DIR$/weather/weather_data_csv/Dockerfile" />
+        <option value="$PROJECT_DIR$/weather/weather_api/Dockerfile" />
         <option value="$PROJECT_DIR$/weather/docker-compose.yml" />
+        <option value="$PROJECT_DIR$/weather/weather_data_transformation/WeatherDataTransformation.py" />
+        <option value="$PROJECT_DIR$/weather/weather_api/WeatherAPIClient.py" />
+        <option value="$PROJECT_DIR$/weather/weather_data_csv/WeatherDataJsonToCsv.py" />
       </list>
     </option>
   </component>
@@ -151,15 +258,16 @@
     <detection-done>true</detection-done>
     <sorting>DEFINITION_ORDER</sorting>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="width" value="1366" />
-    <option name="height" value="736" />
+    <option name="height" value="768" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -167,11 +275,26 @@
               <item name="MDMImport_Modules" type="b2602c69:ProjectViewProjectNode" />
               <item name="MDMImport_Modules" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="MDMImport_Modules" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MDMImport_Modules" type="462c0819:PsiDirectoryNode" />
+              <item name="traffic" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MDMImport_Modules" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MDMImport_Modules" type="462c0819:PsiDirectoryNode" />
+              <item name="traffic" type="462c0819:PsiDirectoryNode" />
+              <item name="traffic_seven" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MDMImport_Modules" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MDMImport_Modules" type="462c0819:PsiDirectoryNode" />
+              <item name="weather" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -189,18 +312,18 @@
     </option>
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/weather/weather_data_transformation" />
+      <recent name="$PROJECT_DIR$/weather/weather_data_csv" />
+      <recent name="$PROJECT_DIR$/weather_data_transformation" />
+      <recent name="$PROJECT_DIR$/weather_data_csv" />
+      <recent name="$PROJECT_DIR$/weath" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/weather" />
       <recent name="$PROJECT_DIR$/weather_data_csv" />
       <recent name="$PROJECT_DIR$/weath" />
       <recent name="$PROJECT_DIR$/rabbitmq" />
-    </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/weather_data_transformation" />
-      <recent name="$PROJECT_DIR$/weather_data_csv" />
-      <recent name="$PROJECT_DIR$/weath" />
-      <recent name="$PROJECT_DIR$/weather" />
-      <recent name="$PROJECT_DIR$/logging" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -384,7 +507,7 @@
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1366" height="736" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49593496" weight="0.14696969" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49593496" visible="true" weight="0.24621212" />
       <window_info id="Structure" order="1" sideWeight="0.50576603" side_tool="true" weight="0.27434555" />
       <window_info id="Favorites" order="2" sideWeight="0.50406504" side_tool="true" weight="0.14461046" />
       <window_info anchor="bottom" id="Messages" order="0" />
@@ -395,7 +518,7 @@
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49733192" weight="0.32781458" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49733192" weight="0.32751092" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5026681" side_tool="true" weight="0.3286026" />
       <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="bottom" id="Python Console" order="11" sideWeight="0.50213444" side_tool="true" weight="0.3286026" />
@@ -408,7 +531,7 @@
       <window_info anchor="right" id="R Packages" order="4" />
       <window_info anchor="right" id="Database" order="5" />
       <window_info anchor="right" id="SciView" order="6" weight="0.32954547" />
-      <window_info anchor="right" x="0" y="0" width="430" height="848" id="Documentation" order="7" side_tool="true" weight="0.3287879" />
+      <window_info anchor="right" x="0" y="0" width="430" height="848" id="Documentation" order="7" side_tool="true" weight="0.23159018" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -421,100 +544,17 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/TrafficFilter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="15" column="12" selection-start-line="15" selection-start-column="12" selection-end-line="15" selection-end-column="12" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TrafficRenameColumns.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="18" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/TrafficStatisticalOverview.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-600">
-          <caret line="15" column="26" selection-start-line="15" selection-start-column="26" selection-end-line="15" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/pika/adapters/blocking_connection.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="196">
-          <caret line="347" selection-start-line="347" selection-end-line="347" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/venv/lib/python3.6/site-packages/twisted/internet/task.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="67" column="8" selection-start-line="67" selection-start-column="8" selection-end-line="67" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Task_XMLJSON.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="757">
-          <caret line="50" selection-start-line="50" selection-end-line="50" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm2018.2/system/python_stubs/-730805299/_signal.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="89" selection-start-line="89" selection-end-line="89" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/lib/python3.6/json/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1005">
-          <caret line="182" column="4" selection-start-line="182" selection-start-column="4" selection-end-line="182" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Task_JSONForTS.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/combined.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1998" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mdm_logging/logging.json">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file:///usr/lib/python3.6/logging/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#1189#1256#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/rabbitmq/__init__.py" />
     <entry file="file://$PROJECT_DIR$/PublishRabbitMQ.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="468">
           <caret line="26" column="32" selection-start-line="26" selection-start-column="32" selection-end-line="26" selection-end-column="32" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -522,9 +562,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="469">
           <caret line="50" selection-start-line="50" selection-end-line="64" selection-end-column="22" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -535,9 +572,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="864">
           <caret line="48" column="48" selection-start-line="48" selection-start-column="48" selection-end-line="48" selection-end-column="48" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -577,27 +611,10 @@
     <entry file="file://$PROJECT_DIR$/weather/RabbitMQProducer.py" />
     <entry file="file://$PROJECT_DIR$/weather/mdm_logging.py" />
     <entry file="file://$PROJECT_DIR$/weather/__init__.py" />
-    <entry file="file://$PROJECT_DIR$/weather/weather_api/Dockerfile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="10" column="14" selection-start-line="10" selection-start-column="14" selection-end-line="10" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/logging_one.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="288">
           <caret line="16" selection-start-line="16" selection-end-line="16" />
-          <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/weather/weather_api/requirements.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="8" lean-forward="true" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -606,16 +623,55 @@
         <state relative-caret-position="-5184" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/weather/weather_api/logging.json">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/Task_WeatherRequestAPI.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="276">
           <caret line="59" column="55" lean-forward="true" selection-start-line="59" selection-start-column="55" selection-end-line="59" selection-end-column="55" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rabbitmq/RabbitMQProducer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="499">
+          <caret line="38" lean-forward="true" selection-start-line="4" selection-end-line="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/rabbitmq/RabbitMQConsumer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="499">
+          <caret line="66" lean-forward="true" selection-start-line="3" selection-end-line="66" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Task_JsonCsv.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Task_JoinWeatherTraffic.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/AnalysisHelperClass.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="28" column="17" lean-forward="true" selection-start-line="17" selection-start-column="4" selection-end-line="28" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/weather/weather_data_transformation/logging.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file:///media/data/Labs/GitLab/Pro/cooler-twin-ts/docker-compose.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="324">
+          <caret line="18" column="34" lean-forward="true" selection-start-line="11" selection-start-column="4" selection-end-line="18" selection-end-column="34" />
         </state>
       </provider>
     </entry>
@@ -626,31 +682,69 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rabbitmq/RabbitMQProducer.py">
+    <entry file="file://$PROJECT_DIR$/traffic/traffic_five/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/traffic/traffic_five/TrafficFilterLargestNew.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="499">
-          <caret line="38" lean-forward="true" selection-start-line="4" selection-end-line="38" />
+        <state relative-caret-position="-497" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/traffic/traffic_one/TrafficListenImportNew.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/traffic/traffic_seven/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/traffic/traffic_seven/TrafficWeatherJoinNew.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="396">
+          <caret line="133" column="28" selection-start-line="133" selection-start-column="28" selection-end-line="133" selection-end-column="28" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
-            <marker date="1533130201819" expanded="true" signature="54:55" ph="..." />
+            <element signature="e#0#15#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/weather/weather_api/WeatherAPIClient.py">
+    <entry file="file://$PROJECT_DIR$/traffic/docker-compose.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="438">
-          <caret line="106" lean-forward="true" selection-start-line="106" selection-end-line="107" selection-end-column="10" />
-          <folding>
-            <element signature="e#0#16#0" expanded="true" />
-          </folding>
-        </state>
+        <state relative-caret-position="-108" />
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/traffic/traffic_seven/Dockerfile">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/weather/weather_data_csv/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="36">
-          <caret line="2" column="7" selection-start-line="2" selection-start-column="7" selection-end-line="2" selection-end-column="7" />
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/weather/weather_data_transformation/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="1" column="4" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/weather/weather_data_transformation/wait-for-it.sh">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/weather/weather_data_csv/wait-for-it.sh">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/weather/weather_api/wait-for-it.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="249">
+          <caret line="146" column="41" lean-forward="true" selection-start-line="146" selection-start-column="41" selection-end-line="146" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/weather/weather_data_transformation/Dockerfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" selection-start-line="10" selection-end-line="10" selection-end-column="39" />
         </state>
       </provider>
     </entry>
@@ -661,97 +755,51 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/rabbitmq/RabbitMQConsumer.py">
+    <entry file="file://$PROJECT_DIR$/weather/weather_data_transformation/WeatherDataTransformation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="499">
-          <caret line="66" lean-forward="true" selection-start-line="3" selection-end-line="66" />
-          <folding>
-            <marker date="1533129836872" expanded="true" signature="37:42" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Task_JsonCsv.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Task_JoinWeatherTraffic.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret lean-forward="true" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/AnalysisHelperClass.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="28" column="17" lean-forward="true" selection-start-line="17" selection-start-column="4" selection-end-line="28" selection-end-column="17" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="469">
+          <caret line="202" column="33" lean-forward="true" selection-start-line="202" selection-start-column="33" selection-end-line="202" selection-end-column="33" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/weather/weather_data_csv/WeatherDataJsonToCsv.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2871">
-          <caret line="14" column="34" lean-forward="true" selection-start-line="14" selection-start-column="34" selection-end-line="14" selection-end-column="34" />
+        <state relative-caret-position="-719">
+          <caret line="146" column="40" selection-start-line="146" selection-start-column="40" selection-end-line="146" selection-end-column="40" />
           <folding>
             <element signature="e#0#10#0" expanded="true" />
-            <marker date="1533489417884" expanded="true" signature="4671:4739" ph="..." />
-            <marker date="1533489417884" expanded="true" signature="4778:4779" ph="..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/weather/weather_data_transformation/logging.json">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/weather/weather_data_transformation/WeatherDataTransformation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3276">
-          <caret line="182" lean-forward="true" selection-start-line="182" selection-end-line="182" />
-          <folding>
-            <element signature="e#0#15#0" expanded="true" />
-            <marker date="1533490739249" expanded="true" signature="3488:3515" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/weather/weather_data_transformation/Dockerfile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="10" column="44" selection-start-line="10" selection-start-column="44" selection-end-line="10" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/weather/weather_data_transformation/requirements.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="6" lean-forward="true" selection-start-line="1" selection-start-column="6" selection-end-line="1" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///media/data/Labs/GitLab/Pro/cooler-twin-ts/docker-compose.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="18" column="34" lean-forward="true" selection-start-line="11" selection-start-column="4" selection-end-line="18" selection-end-column="34" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/weather/docker-compose.yml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="12" column="26" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
+        <state relative-caret-position="631">
+          <caret line="37" column="28" lean-forward="true" selection-start-line="37" selection-start-column="28" selection-end-line="37" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/weather/weather_api/Dockerfile">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="8" column="8" lean-forward="true" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/weather/weather_api/logging.json">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/weather/weather_api/requirements.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="1" column="4" selection-start-line="1" selection-start-column="4" selection-end-line="1" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/weather/weather_api/WeatherAPIClient.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="53" column="26" lean-forward="true" selection-start-line="53" selection-start-column="26" selection-end-line="53" selection-end-column="26" />
         </state>
       </provider>
     </entry>

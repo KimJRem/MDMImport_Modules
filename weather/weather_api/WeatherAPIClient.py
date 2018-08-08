@@ -40,7 +40,7 @@ class RabbitMQProducer:
 
             channel.exchange_declare(exchange=self.config['exchangeName'],
                                      exchange_type=self.config['exchangeType'],
-                                     passive=True)
+                                     passive=False)
             channel.basic_publish(exchange=self.config['exchangeName'],
                                   routing_key=self.config['routingKey'],
                                   body=message)
@@ -84,7 +84,6 @@ def main():
         body = json.dumps(data)
 
         producer.publish(body)
-        logger.info('Published Data %s' % data)
 
         time.sleep(5)
 
@@ -92,7 +91,7 @@ def main():
 # =========================== Main start ======================================
 config = json.dumps({
     "exchangeName": "topic_datas",
-    "host": "127.0.0.1",
+    "host": "rabbitmq",
     "exchangeType": "topic",
     "routingKey": "12"
 

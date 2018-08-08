@@ -163,21 +163,21 @@ logger = logging.getLogger(__name__)
 
 consumer_config = json.dumps({
     "exchangeName": "topic_datas",
-    "host": "127.0.0.1",
+    "host": "rabbitmq",
     "routingKey": "24",
     "exchangeType": "topic",
-    "queueName": "12",
+    "queueName": "24",
     "exchangeOptions": {
         "passive": True,
-        "durable": True,
-        "autoDelete": True,
+        "durable": False,
+        "autoDelete": False,
         "internal": False
     },
     "queueOptions": {
-        "passive": True,
-        "durable": True,
+        "passive": False,
+        "durable": False,
         "exclusive": True,
-        "autoDelete": True
+        "autoDelete": False
     }
 })
 

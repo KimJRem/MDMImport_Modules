@@ -1,41 +1,44 @@
 version: '3'
 services:
   rabbitmq:
-    hostname: "rabbit"
+    hostname: "rabbitmq"
     image: "rabbitmq:latest"
-    container_name: "rabbitmq"
+    container_name: "rabbitmq2"
     ports:
-    - "5672:5672"
+      - "5672:5672"
 
-  weather-api:
-    container_name: "weather-api"
+  weather_api:
+    container_name: "weather_api"
     build:
       context: weather_api
-      dockerfile: weather_api/Dockerfile
+      dockerfile: Dockerfile
     tty: true
     depends_on:
-    - "rabbitmq"
+      - "rabbitmq"
+    restart: on-failure
     volumes:
-    - ./weather-api:/usr/src/app
+      - ./weather_api:/usr/src/app
 
-  weather-data-csv:
-    container_name: "weather-data-csv"
+  weather_data_csv:
+    container_name: "weather_data_csv"
     build:
       context: weather_data_csv
-      dockerfile: weather_data_csv/Dockerfile
+      dockerfile: Dockerfile
     tty: true
     depends_on:
-    - "rabbitmq"
+      - "rabbitmq"
+    restart: on-failure
     volumes:
-    - ./weather-data-csv:/usr/src/app
+      - ./weather_data_csv:/usr/src/app
 
-  weather-data-transformation:
-    container_name: "weather-data-transformation"
+  weather_data_transformation:
+    container_name: "weather_data_transformation"
     build:
       context: weather_data_transformation
-      dockerfile: weather_data_transformation/Dockerfile
+      dockerfile: Dockerfile
     tty: true
     depends_on:
-    - "rabbitmq"
+      - "rabbitmq"
+    restart: on-failure
     volumes:
-    - ./weather-data-transformation:/usr/src/app
+      - ./weather_data_transformation:/usr/src/app

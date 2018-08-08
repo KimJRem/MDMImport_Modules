@@ -40,7 +40,7 @@ class RabbitMQProducer:
 
             channel.exchange_declare(exchange=self.config['exchangeName'],
                                      exchange_type=self.config['exchangeType'],
-                                     passive=True)
+                                     passive=False)
             channel.basic_publish(exchange=self.config['exchangeName'],
                                   routing_key=self.config['routingKey'],
                                   body=message)
@@ -144,7 +144,6 @@ class WeatherDataJsonToCsv:
                            'sys_country', 'sys_sunrise', 'sys_sunset', 'id', 'name', 'cod']
                 writer = csv.DictWriter(csv_file, delimiter=',', lineterminator='\n', fieldnames=headers)
                 if file_empty:
-                    print("Header is written now")
                     logger.info('Header is written now')
                     writer.writeheader()  # file doesn't exist yet, write a header
                 writer.writerow(x)
@@ -165,28 +164,28 @@ class WeatherDataJsonToCsv:
 
 consumer_config = json.dumps({
     "exchangeName": "topic_datas",
-    "host": "127.0.0.1",
+    "host": "rabbitmq",
     "routingKey": "12",
     "exchangeType": "topic",
     "queueName": "12",
     "exchangeOptions": {
-        "passive": True,
-        "durable": True,
-        "autoDelete": True,
+        "passive": False,
+        "durable": False,
+        "autoDelete": False,
         "internal": False
     },
     "queueOptions": {
-        "passive": True,
-        "durable": True,
+        "passive": False,
+        "durable": False,
         "exclusive": True,
-        "autoDelete": True
+        "autoDelete": False
     }
 })
 
 producer_config = json.dumps({
     "exchangeName": "topic_datas",
     "exchangeType": "topic",
-    "host": "127.0.0.1",
+    "host": "rabbitmq",
     "routingKey": "24"
 
 })
@@ -197,10 +196,11 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    # consume from Queue
-    with RabbitMQConsumer(json.loads(consumer_config)) as consumer:
-        logger.info('Consume')
-        consumer.consume(resolve_message)
+    while True:
+        # consume from Queue
+        with RabbitMQConsumer(json.loads(consumer_config)) as consumer:
+            logger.info('Consume')
+            consumer.consume(resolve_message)
 
 
 def resolve_message(data):
