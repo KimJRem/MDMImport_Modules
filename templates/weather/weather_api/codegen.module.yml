@@ -1,0 +1,52 @@
+
+name: WeatherAPIModule
+id: com.hahnpro.module.weather.api
+parent: com.hahnpro.module.weather
+templates:
+    -   id: init
+        file: _init_.vm
+
+    -   id: dockerfile
+        hooks:
+            -   hookClass: org.mdbda.codegen.hooks.NewFileHook
+                template: com.hahnpro.module.weather.api:dockerfileTemplate
+                fileName: Dockerfile
+                dir: ./weather_api
+    -   id: dockerfileTemplate
+        file: Dockerfile.vm
+
+    -   id: logging
+        hooks:
+            -   hookClass: org.mdbda.codegen.hooks.NewFileHook
+                template: com.hahnpro.module.weather.api:loggingTemplate
+                fileName: logging.json
+                dir: ./weather_api
+    -   id: loggingTemplate
+        file: logging.json.vm
+
+    -   id: requirements
+        hooks:
+            -   hookClass: org.mdbda.codegen.hooks.NewFileHook
+                template: com.hahnpro.module.weather.api:requirementsTemplate
+                fileName: requirements.txt
+                dir: ./weather_api
+    -   id: requirementsTemplate
+        file: requirements.txt.vm
+
+    -   id: wait
+        hooks:
+            -   hookClass: org.mdbda.codegen.hooks.NewFileHook
+                template: com.hahnpro.module.weather.api:waitTemplate
+                fileName:  wait-for-it.sh
+                dir: ./weather_api
+    -   id: waitTemplate
+        file: wait-for-it.sh.vm
+
+    -   id: app
+        hooks:
+            -   hookClass: org.mdbda.codegen.hooks.NewFileHook
+                template: com.hahnpro.module.weather.api:appTemplate
+                fileName: WeatherAPIClient.py
+                dir: ./weather_api
+    -   id: appTemplate
+        file: WeatherAPIClient.py.vm

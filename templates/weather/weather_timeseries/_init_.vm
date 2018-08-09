@@ -1,0 +1,9 @@
+#set($SRC_ROOT = "weather_timeseries")
+#set($NEW_DIR = $SRC_ROOT)
+#parse("mdbda.codegen.core:createDir")
+
+#parse("com.hahnpro.module.weather.timeseries:dockerfile")
+#parse("com.hahnpro.module.weather.timeseries:logging")
+#parse("com.hahnpro.module.weather.timeseries:requirements")
+#parse("com.hahnpro.module.weather.timeseries:wait")
+#parse("com.hahnpro.module.weather.timeseries:app")

@@ -1,0 +1,52 @@
+
+name: WeatherTimeseriesModule
+id: com.hahnpro.module.weather.timeseries
+parent: com.hahnpro.module.weather
+templates:
+    -   id: init
+        file: _init_.vm
+
+    -   id: dockerfile
+        hooks:
+            -   hookClass: org.mdbda.codegen.hooks.NewFileHook
+                template: com.hahnpro.module.weather.timeseries:dockerfileTemplate
+                fileName: Dockerfile
+                dir: ./weather_timeseries
+    -   id: dockerfileTemplate
+        file: Dockerfile.vm
+
+    -   id: logging
+        hooks:
+            -   hookClass: org.mdbda.codegen.hooks.NewFileHook
+                template: com.hahnpro.module.weather.timeseries:loggingTemplate
+                fileName: logging.json
+                dir: ./weather_timeseries
+    -   id: loggingTemplate
+        file: logging.json.vm
+
+    -   id: requirements
+        hooks:
+            -   hookClass: org.mdbda.codegen.hooks.NewFileHook
+                template: com.hahnpro.module.weather.timeseries:requirementsTemplate
+                fileName: requirements.txt
+                dir: ./weather_timeseries
+    -   id: requirementsTemplate
+        file: requirements.txt.vm
+
+    -   id: wait
+        hooks:
+            -   hookClass: org.mdbda.codegen.hooks.NewFileHook
+                template: com.hahnpro.module.weather.timeseries:waitTemplate
+                fileName:  wait-for-it.sh
+                dir: ./weather_timeseries
+    -   id: waitTemplate
+        file: wait-for-it.sh.vm
+
+    -   id: app
+        hooks:
+            -   hookClass: org.mdbda.codegen.hooks.NewFileHook
+                template: com.hahnpro.module.weather.timeseries:appTemplate
+                fileName: WeatherTimeseries.py
+                dir: ./weather_timeseries
+    -   id: appTemplate
+        file: WeatherTimeseries.py.vm

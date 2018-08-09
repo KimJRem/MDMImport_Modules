@@ -1,0 +1,10 @@
+#set($SRC_ROOT = ".")
+#set($NEW_DIR = $SRC_ROOT)
+#parse("mdbda.codegen.core:createDir")
+
+#parse("com.hahnpro.module.weather:dockercompose")
+
+#parse("com.hahnpro.module.weather.api:init")
+#parse("com.hahnpro.module.weather.csv:init")
+#parse("com.hahnpro.module.weather.data:init")
+#parse("com.hahnpro.module.weather.timeseries:init")
