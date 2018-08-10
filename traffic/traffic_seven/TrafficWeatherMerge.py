@@ -11,9 +11,8 @@ import json
 import logging
 import logging.config
 
-# https://stackoverflow.com/questions/50813108/get-transferred-file-name-in-rabbitmq-using-python-pika
-# for transferring csv files
 
+# Sets the logging configurations with logging.json file
 def setup_logging(
         default_path='./logging.json',
         default_level=logging.INFO):
@@ -29,11 +28,11 @@ def setup_logging(
         logging.basicConfig(level=default_level)
 
 
+# Class to publish data to a RabbitMQ queue
 class RabbitMQProducer:
-    """ RabbitMQ Producer Implementation in Python"""
 
     def __init__(self, config):
-        # Initialize the consumer with the available configs of rabbitMQ
+        # Initialize the consumer with the available configs of RabbitMQ
         self.config = config
 
     def publish(self, message):
@@ -65,33 +64,21 @@ class RabbitMQProducer:
         return pika.BlockingConnection(parameters)
 
 
+# Class to consume data from a RabbitMQ queue
 class RabbitMQConsumer:
-    """RabbitMQ Consumer Implementation in Python"""
 
     def __init__(self, config):
-        # Initialize the consumer with the available configs of rabbitMQ
+        # Initialize the consumer with the available configs of RabbitMQ
         self.config = config
-
-    def __enter__(self):
-        # Open the connection
-        self.connection = self._create_connection()
-        return self
-
-    def __exit__(self, *args):
-        # Close the connection
-        self.connection.close()
 
     def consume(self):
         # Consume message. It tells the broker to spin up a consumer process, which checks for messages
         # on a specified queue, and then registers a callback function. The callback function should be executed
         # when a message is available and has been delivered to the client.
-        #self.message_received_callback = message_received_callback
 
-        #channel = self.connection.channel()
         global connection
         connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.config['host']))
         channel = connection.channel()
-
 
         self._create_exchange(channel)
         self._create_queue(channel)
@@ -125,26 +112,20 @@ class RabbitMQConsumer:
                               exclusive=queue_options['exclusive'],
                               auto_delete=queue_options['autoDelete'])
 
-
-    def _create_connection(self):
-        # Open a new connection if it is not existing
-        parameters = pika.ConnectionParameters(host=self.config['host'])
-        return pika.BlockingConnection(parameters)
-
     def callback(self, ch, method, properties, body):
         # Callback function that will be executed
         logger.info('consume message')
         global connection
         global gdata
         gdata = body
-        #self.message_received_callback(body)
         ch.basic_ack(delivery_tag=method.delivery_tag)
         connection.close()
 
+
+# Class with helping functions
 class HelperClass:
 
-    # get csv and store in DF
-
+    # Decode a csv file and return csv filename
     def decodeCsv(self, body):
         file_name = body.decode().split('.csv')[0]
         message = body.decode().split('.csv')[1]
@@ -153,21 +134,24 @@ class HelperClass:
             write_csv.write(message)
         return filename
 
+    # Transform csv into a pandas Dataframe
     def csvToDF(self, filename):
         df = pd.read_csv(filename, error_bad_lines=False)
         return df
 
 
+# Class to merge weather and traffic data on timestamp
 class TrafficWeatherMerge:
 
-    # select important columns, rename columns, convert Kelvin to Celsius, convert Date to readable format
+    # Preparation of the weather data
+    # Select important columns, rename columns, convert Kelvin to Celsius, convert date
     def weather_API_dataPrep(self, df):
-        # extract only relevant columns
+
         df_selectedColumns = df[
             ['dt', 'weather_0_main', 'weather_0_description', 'main_temp', 'main_temp_min', 'main_temp_max',
              'main_pressure', 'main_humidity', 'sys_sunrise', 'sys_sunset', 'wind_speed', 'wind_deg',
              'clouds_all', 'visibility', 'rain_3h', 'snow_3h']]
-        # rename columns
+
         df_selectedColumns = df_selectedColumns.rename(
             columns={"dt": "Date_unix", "weather_0_main": "General_description",
                      "weather_0_description": "Short_description",
@@ -177,21 +161,22 @@ class TrafficWeatherMerge:
                      "sys_sunset": "Sunset", "wind_speed": "Wind_speed",
                      "wind_deg": "Wind_direction", "clouds_all": "Clouds",
                      "visibility": "Visibility", "rain_3h": "Rain_last3h", "snow_3h": "Snow_last3h"})
-        #create three new columns with °C instead of Kelvin, alternatively get Celsius directly from API
+
         df_selectedColumns['Temp_Celsius'] = (df_selectedColumns.Temperature - 273.15)
         df_selectedColumns['Min_Temperature_Celsius'] = (df_selectedColumns.Min_Temperature - 273.15)
         df_selectedColumns['Max_Temperature_Celsius'] = (df_selectedColumns.Max_Temperature - 273.15)
-        # convert date to readable format, should be the same format as the MDM data
+
         df_selectedColumns['Date'] = df_selectedColumns.apply(
             lambda row: datetime.datetime.utcfromtimestamp(row['Date_unix']).replace(tzinfo=datetime.timezone.utc),
             axis=1)
-        # set Date to one conform standard
         df_selectedColumns['Date'] = pd.to_datetime(df_selectedColumns['Date']).dt.tz_convert('Europe/Berlin')
         df_selectedColumns.fillna(0, inplace=True)
         return df_selectedColumns
 
-    # dataPrepTraffic = rename
+    # Preparation of the traffic data
+    # Rename columns, convert date
     def traffic_dataPrep(self, dataframe):
+
         columnNames = list(dataframe.head(0))
         firstColumnName = columnNames[0]
 
@@ -219,9 +204,8 @@ class TrafficWeatherMerge:
             dfFacility['Date'] = pd.to_datetime(dfFacility['Date']).dt.tz_localize('UTC').dt.tz_convert('Europe/Berlin')
             return dfFacility
 
-    # merge dataset on Time (+/- 2 minutes)
-    # drop all rows where column "Short_description" has NaN values, assuming "Short_description" will be in every import from the weather API
-
+    # Function to merge the two datasets on timestamp (+/- 2 minutes)
+    # assuming "Short description" will be in every weather data import, drop all columns with NaN values in "Short description"
     def mergeDatasetsNew(self, dfWeather, dfTraffic):
         columnNames = list(dfTraffic.head(0))
         firstColumnName = columnNames[0]
@@ -238,6 +222,8 @@ class TrafficWeatherMerge:
             logger.info('mergeFour')
             c.to_csv('facilityundwetter.csv', sep='\t', encoding='utf-8')
 
+
+# Configurations for consumer for traffic data
 consumer_configOne = json.dumps({
     "exchangeName": "topic_data",
     "host": "localhost",
@@ -258,6 +244,7 @@ consumer_configOne = json.dumps({
     }
 })
 
+# Configurations for consumer for weather data
 consumer_configTwo = json.dumps({
     "exchangeName": "topic_datas",
     "host": "localhost",
@@ -278,6 +265,7 @@ consumer_configTwo = json.dumps({
     }
 })
 
+# Initialise the two consumers with its configuration
 consumer_one = RabbitMQConsumer(json.loads(consumer_configOne))
 consumer_two = RabbitMQConsumer(json.loads(consumer_configTwo))
 
@@ -285,6 +273,7 @@ setup_logging()
 logger = logging.getLogger(__name__)
 
 
+# Consume from queue, do transformations and merge data sets
 def main():
     while True:
         logger = logging.getLogger(__name__)
