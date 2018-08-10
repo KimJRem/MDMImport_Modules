@@ -4,7 +4,6 @@ import pandas as pd
 import json
 import pika
 import traceback
-import HelperClass
 import os
 import json
 import logging
@@ -129,6 +128,23 @@ class RabbitMQConsumer:
         self.message_received_callback(body)
         channel.basic_ack(delivery_tag=method.delivery_tag)
 
+class HelperClass:
+
+    # get csv and store in DF
+
+    def decodeCsv(self, body):
+        file_name = body.decode().split('.csv')[0]
+        message = body.decode().split('.csv')[1]
+        filename = '{}.csv'.format(file_name)
+        with open(filename, 'w', encoding='utf-8') as write_csv:
+            # with open('{}.csv'.format(file_name), 'w') as write_csv:
+            write_csv.write(message)
+        return filename
+
+    def csvToDF(self, filename):
+        df = pd.read_csv(filename, error_bad_lines=False)
+        return df
+
 
 class TrafficFilterLargestNew:
 
@@ -176,16 +192,14 @@ class TrafficFilterLargestNew:
             df_filter = df[firstColumnName].groupby(df['parkingFacilityReference_@id']).mean()
             i = df_filter.nlargest(4)
         elif firstColumnName == 'OccupancyRateFacility':
-            print(df)
             df = df[df.Status == 'open']
-            print(df)
             df_filter = df[firstColumnName].groupby(df['ParkingFacilityID']).mean()
             i = df_filter.nlargest(4)
         return i
 
 
 consumer_config = json.dumps({
-    "exchangeName": "topic_datas",
+    "exchangeName": "topic_data",
     "host": "rabbitmq",
     "routingKey": "cd",
     "exchangeType": "direct",
@@ -230,7 +244,7 @@ def resolve_message(data):
     task = TrafficFilterLargestNew()
     renamed_DF = task.renameColumns(df)
     filter = task.popularParkingbyID(renamed_DF)
-    print('Print filter: ')
+    print('Print Filter: ')
     print(filter)
     logger.info('Filter has been applied to the data set')
 

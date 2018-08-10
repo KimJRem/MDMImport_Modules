@@ -9,4 +9,4 @@ COPY . .
 
 RUN ["chmod", "+x", "./wait-for-it.sh"]
 
-CMD [ "./wait-for-it.sh", "rabbitmq:5672", "--", "python", "./TrafficListenImportNew.py" ]
+CMD ["./wait-for-it.sh", "rabbitmq:5672", "--", "python", "./TrafficListenImportNew.py"]

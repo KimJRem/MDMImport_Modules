@@ -34,9 +34,7 @@ class MyHandler(PatternMatchingEventHandler):
     def process(self, event):
         # the file will be processed there
         try:
-            print(event.src_path, event.event_type)  # print now only for debug
-            print("There was one newly created file")
-            # logger.info(event.scr_path, event.event_type)
+            print(event.scr_path, event.event_type)  # for controlling only
             logger.info('There was one newly created file')
 
             with open(event.src_path, 'rb') as xml_source:
@@ -44,8 +42,6 @@ class MyHandler(PatternMatchingEventHandler):
 
             producer.publish(xml_string)
             logger.info('Published Data to queue')
-
-
         except:
             logger.error('The newly created file could not be processed')
             raise
@@ -101,6 +97,7 @@ def main():
     print(os.listdir("/usr/src/app"))
     # path of directory to look for needs to inserted in the command line
     newObserver.schedule(MyHandler(), path='/usr/src/app/output')
+    #newObserver.schedule(MyHandler(), path='/Users/kim/MDMImporter/output')
 
     newObserver.start()
 
@@ -120,7 +117,7 @@ setup_logging()
 logger = logging.getLogger(__name__)
 
 producer_config = json.dumps({
-    "exchangeName": "topic_datas",
+    "exchangeName": "topic_data",
     "exchangeType": "direct",
     "host": "rabbitmq",
     "routingKey": "ab"

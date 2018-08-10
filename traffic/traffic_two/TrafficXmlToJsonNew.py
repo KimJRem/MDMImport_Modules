@@ -139,7 +139,7 @@ class TrafficXmlToJsonNew:
                 yield a
             logger.info('xmlToJsonArea successfully completed')
         except:
-            print('Conversion to Json did not work')
+            logger.info('Conversion to Json did not work')
             raise
 
     def xmlToJsonFacility(self, file):
@@ -157,14 +157,15 @@ class TrafficXmlToJsonNew:
                 yield a
             logger.info('xmlToJsonFacility successfully completed')
         except:
-            print('Conversion to JSON did not work')
+            logger.info('Conversion to JSON did not work')
+            raise
 
             # consume from Queue
             # turn Xml to JSON
             # push them to Queue
 
 consumer_config = json.dumps({
-    "exchangeName": "topic_datas",
+    "exchangeName": "topic_data",
     "host": "rabbitmq",
     "routingKey": "ab",
     "exchangeType": "direct",
@@ -184,7 +185,7 @@ consumer_config = json.dumps({
 })
 
 producer_config = json.dumps({
-    "exchangeName": "topic_datas",
+    "exchangeName": "topic_data",
     "exchangeType": "direct",
     "host": "rabbitmq",
     "routingKey": "bc"
@@ -219,6 +220,7 @@ def resolve_message(data):
     for j in json_facilities:
         producer.publish(j)
     logger.info('Json files have been pushed to the queue')
+
 
 if __name__ == "__main__":
     main()

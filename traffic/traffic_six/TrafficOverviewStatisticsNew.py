@@ -5,7 +5,6 @@ import pandas as pd
 import json
 import pika
 import traceback
-import HelperClass
 import os
 import json
 import logging
@@ -129,6 +128,22 @@ class RabbitMQConsumer:
         self.message_received_callback(body)
         channel.basic_ack(delivery_tag=method.delivery_tag)
 
+class HelperClass:
+
+    # get csv and store in DF
+
+    def decodeCsv(self, body):
+        file_name = body.decode().split('.csv')[0]
+        message = body.decode().split('.csv')[1]
+        filename = '{}.csv'.format(file_name)
+        with open(filename, 'w', encoding='utf-8') as write_csv:
+            write_csv.write(message)
+        return filename
+
+    def csvToDF(self, filename):
+        df = pd.read_csv(filename, error_bad_lines=False)
+        return df
+
 
 class TrafficOverviewStatisticsNew:
 
@@ -167,7 +182,7 @@ class TrafficOverviewStatisticsNew:
 
 
 consumer_config = json.dumps({
-    "exchangeName": "topic_datas",
+    "exchangeName": "topic_data",
     "host": "rabbitmq",
     "routingKey": "cd",
     "exchangeType": "direct",
@@ -211,6 +226,7 @@ def resolve_message(data):
     task = TrafficOverviewStatisticsNew()
     renamed_DF = task.renameColumns(df)
     stats = task.ALL_describe(renamed_DF)
+    print('Printing the statistics')
     print(stats)
     logger.info('Statistical overview for DF has been supplied')
 

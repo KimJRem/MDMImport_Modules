@@ -130,7 +130,6 @@ class TrafficJsonToTSNew:
     def transformTS(self, data_object):
 
         x = flatten(data_object)
-        print(x)
         firstkey = list(x.keys())[0]
         if firstkey == 'parkingAreaOccupancy':
             new_dict = {'parkingAreaID':x['parkingAreaReference_@id'],

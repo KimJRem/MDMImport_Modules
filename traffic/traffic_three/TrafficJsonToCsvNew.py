@@ -8,6 +8,7 @@ import os
 import logging
 import logging.config
 
+
 # https://stackoverflow.com/questions/50813108/get-transferred-file-name-in-rabbitmq-using-python-pika
 # for transferring csv files
 
@@ -115,7 +116,6 @@ class RabbitMQConsumer:
                               exclusive=queue_options['exclusive'],
                               auto_delete=queue_options['autoDelete'])
 
-
     def _create_connection(self):
         # Open a new connection if it is not existing
         parameters = pika.ConnectionParameters(host=self.config['host'])
@@ -131,40 +131,36 @@ class TrafficJsonToCsvNew:
 
     def JSONtoCsvArea(self, **data):
         logger = logging.getLogger(__name__)
-        # filename = 'mdm_data_parkingArea.csv'
         global filenameArea
         filenameArea = 'mdm_data_parkingArea.csv'
         with open(filenameArea, "a", encoding='utf-8') as csvfile:
-        #with open(filenameArea, 'rwb') as csvfile:
             fileEmpty = os.stat(filenameArea).st_size == 0
             headers = list(data)
             writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=headers)
             if fileEmpty:
-                # print("Header is written now")
                 logger.info('Header is written now')
                 writer.writeheader()  # file doesn't exist yet, write a header
-            #cannot deal with the letter "ö" in Wilhelmshöhe
             writer.writerow(data)
-            # print('Received one set of data')
             logger.info('Received one set of data')
         csvfile.close()
 
     def JSONtoCsvFacility(self, **data):
         logger = logging.getLogger(__name__)
-        # filename = 'mdm_data_parkingFacility.csv'
         global filenameFacility
         filenameFacility = 'mdm_data_parkingFacility.csv'
-        #with open(filenameFacility, "ab") as csvfile:
         with open(filenameFacility, 'a', encoding='utf-8') as csvfile:
             fileEmpty = os.stat(filenameFacility).st_size == 0
-            headers = list(data)
+            headers = ['parkingFacilityOccupancy', 'parkingFacilityOccupancyTrend',
+                      'parkingFacilityReference_@targetClass', 'parkingFacilityReference_@id',
+                      'parkingFacilityReference_@version', 'parkingFacilityStatus', 'parkingFacilityStatusTime',
+                      'totalNumberOfOccupiedParkingSpaces', 'totalNumberOfVacantParkingSpaces',
+                      'totalParkingCapacityOverride', 'totalParkingCapacityShortTermOverride', 'SubscriptionID']
+
             writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=headers)
             if fileEmpty:
-                # print("Header is written now")
                 logger.info('Header is written now')
                 writer.writeheader()
             writer.writerow(data)
-            # print('Received one set of data')
             logger.info('Received one set of data')
         csvfile.close()
 
@@ -172,8 +168,9 @@ class TrafficJsonToCsvNew:
         with open(filename, 'rb') as csv_file:
             return filename + csv_file.read().decode()
 
+
 consumer_config = json.dumps({
-    "exchangeName": "topic_datas",
+    "exchangeName": "topic_data",
     "host": "rabbitmq",
     "routingKey": "bc",
     "exchangeType": "direct",
@@ -193,7 +190,7 @@ consumer_config = json.dumps({
 })
 
 producer_config = json.dumps({
-    "exchangeName": "topic_datas",
+    "exchangeName": "topic_data",
     "exchangeType": "direct",
     "host": "rabbitmq",
     "routingKey": "cd"
@@ -218,7 +215,6 @@ def main():
 
 
 def resolve_message(data):
-
     print(" [x] Receiving message %r" % data)
 
     task = TrafficJsonToCsvNew()
@@ -226,7 +222,7 @@ def resolve_message(data):
 
     if k < 11:
         json_data = json.loads(data)
-        #a = task.byteify(json_data)
+        # a = task.byteify(json_data)
         x = flatten(json_data)
         firstkey = list(x.keys())[0]
         # taskOne = Task_JsonCsv()
@@ -238,7 +234,6 @@ def resolve_message(data):
             task.JSONtoCsvFacility(**x)
             logger.info('Stored data in csvFacility')
         k = k + 1
-        print(k)
     else:
         json_data = json.loads(data)
         x = flatten(json_data)
@@ -258,7 +253,7 @@ def resolve_message(data):
         producer.publish(j)
         logger.info('Csv facility files have been pushed to the queue')
         k = k + 1
-        print(k)
+
 
 if __name__ == "__main__":
     main()

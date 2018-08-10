@@ -1,3 +1,0 @@
-parkingAreaOccupancy,parkingAreaReference_@targetClass,parkingAreaReference_@id,parkingAreaReference_@version,parkingAreaStatusTime,parkingAreaTotalNumberOfVacantParkingSpaces,totalParkingCapacityLongTermOverride,totalParkingCapacityShortTermOverride,SubscriptionID
-0.51984596,ParkingArea,1001[Stadtmitte],1.0,2018-08-05T14:51:00.859+02:00,1621,3376,3376,2683000
-1.0,ParkingArea,1002[Bhf. Wilhelmshöhe],1.0,2018-08-05T14:51:00.859+02:00,0,150,150,2683000

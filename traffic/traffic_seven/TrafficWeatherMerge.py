@@ -2,7 +2,6 @@ import datetime
 import os.path
 import pika
 import traceback
-import HelperClass
 import csv
 import numpy as np
 import pandas as pd
@@ -82,13 +81,17 @@ class RabbitMQConsumer:
         # Close the connection
         self.connection.close()
 
-    def consume(self, message_received_callback):
+    def consume(self):
         # Consume message. It tells the broker to spin up a consumer process, which checks for messages
         # on a specified queue, and then registers a callback function. The callback function should be executed
         # when a message is available and has been delivered to the client.
-        self.message_received_callback = message_received_callback
+        #self.message_received_callback = message_received_callback
 
-        channel = self.connection.channel()
+        #channel = self.connection.channel()
+        global connection
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host=self.config['host']))
+        channel = connection.channel()
+
 
         self._create_exchange(channel)
         self._create_queue(channel)
@@ -97,11 +100,13 @@ class RabbitMQConsumer:
                            exchange=self.config['exchangeName'],
                            routing_key=self.config['routingKey'])
 
-        channel.basic_consume(self._consume_message, queue=self.config['queueName'])
+        channel.basic_consume(self.callback, queue=self.config['queueName'])
         channel.start_consuming()
+        return gdata
 
     def _create_exchange(self, channel):
         # Declare the exchange using the given communication channel
+        logger.info('create exchange')
         exchange_options = self.config['exchangeOptions']
         channel.exchange_declare(exchange=self.config['exchangeName'],
                                  exchange_type=self.config['exchangeType'],
@@ -112,6 +117,7 @@ class RabbitMQConsumer:
 
     def _create_queue(self, channel):
         # Create the queue to pick up the messages directly from the queue
+        logger.info('create queue')
         queue_options = self.config['queueOptions']
         channel.queue_declare(queue=self.config['queueName'],
                               passive=queue_options['passive'],
@@ -125,13 +131,34 @@ class RabbitMQConsumer:
         parameters = pika.ConnectionParameters(host=self.config['host'])
         return pika.BlockingConnection(parameters)
 
-    def _consume_message(self, channel, method, properties, body):
+    def callback(self, ch, method, properties, body):
         # Callback function that will be executed
-        self.message_received_callback(body)
-        channel.basic_ack(delivery_tag=method.delivery_tag)
+        logger.info('consume message')
+        global connection
+        global gdata
+        gdata = body
+        #self.message_received_callback(body)
+        ch.basic_ack(delivery_tag=method.delivery_tag)
+        connection.close()
+
+class HelperClass:
+
+    # get csv and store in DF
+
+    def decodeCsv(self, body):
+        file_name = body.decode().split('.csv')[0]
+        message = body.decode().split('.csv')[1]
+        filename = '{}.csv'.format(file_name)
+        with open(filename, 'w', encoding='utf-8') as write_csv:
+            write_csv.write(message)
+        return filename
+
+    def csvToDF(self, filename):
+        df = pd.read_csv(filename, error_bad_lines=False)
+        return df
 
 
-class TrafficWeatherJoinNew:
+class TrafficWeatherMerge:
 
     # select important columns, rename columns, convert Kelvin to Celsius, convert Date to readable format
     def weather_API_dataPrep(self, df):
@@ -160,6 +187,7 @@ class TrafficWeatherJoinNew:
             axis=1)
         # set Date to one conform standard
         df_selectedColumns['Date'] = pd.to_datetime(df_selectedColumns['Date']).dt.tz_convert('Europe/Berlin')
+        df_selectedColumns.fillna(0, inplace=True)
         return df_selectedColumns
 
     # dataPrepTraffic = rename
@@ -193,29 +221,26 @@ class TrafficWeatherJoinNew:
 
     # merge dataset on Time (+/- 2 minutes)
     # drop all rows where column "Short_description" has NaN values, assuming "Short_description" will be in every import from the weather API
-    def mergeDatasets(self, dfWeather, dfTraffic):
-        newDF = pd.merge_asof(dfWeather, dfTraffic, on='Date', tolerance=pd.Timedelta('12000ms'))
-        newDF.to_csv('verkehrundwetter.csv', sep='\t', encoding='utf-8')
-        print(newDF)
-        return newDF
 
     def mergeDatasetsNew(self, dfWeather, dfTraffic):
         columnNames = list(dfTraffic.head(0))
         firstColumnName = columnNames[0]
         if firstColumnName == 'parkingAreaOccupancy':
+            logger.info('mergeOne')
             newDFArea = pd.merge_asof(dfWeather, dfTraffic, on='Date', tolerance=pd.Timedelta('12000ms'))
+            logger.info('mergeTwo')
             b = newDFArea.dropna(subset=['Short_description'])
             b.to_csv('areaundwetter.csv', sep='\t', encoding='utf-8')
-            print(newDFArea)
         else:
             newDFFacility = pd.merge_asof(dfWeather, dfTraffic, on='Date', tolerance=pd.Timedelta('12000ms'))
+            logger.info('mergeThree')
             c = newDFFacility.dropna(subset=['Short_description'])
+            logger.info('mergeFour')
             c.to_csv('facilityundwetter.csv', sep='\t', encoding='utf-8')
-            print(newDFFacility)
 
 consumer_configOne = json.dumps({
-    "exchangeName": "topic_datas",
-    "host": "rabbitmq",
+    "exchangeName": "topic_data",
+    "host": "localhost",
     "routingKey": "cd",
     "exchangeType": "direct",
     "queueName": "cd",
@@ -235,7 +260,7 @@ consumer_configOne = json.dumps({
 
 consumer_configTwo = json.dumps({
     "exchangeName": "topic_datas",
-    "host": "rabbitmq",
+    "host": "localhost",
     "routingKey": "24",
     "exchangeType": "topic",
     "queueName": "24",
@@ -253,51 +278,45 @@ consumer_configTwo = json.dumps({
     }
 })
 
+consumer_one = RabbitMQConsumer(json.loads(consumer_configOne))
+consumer_two = RabbitMQConsumer(json.loads(consumer_configTwo))
+
 setup_logging()
 logger = logging.getLogger(__name__)
 
+
 def main():
+    while True:
+        logger = logging.getLogger(__name__)
 
-    # consume from traffic queue
-    with RabbitMQConsumer(json.loads(consumer_configOne)) as consumer:
-        logger.info('Consume')
-        consumer.consume(resolve_messageTraffic)
+        #consume from traffic queue
+        logger.info('Consume traffic')
+        y = consumer_one.consume()
 
-    # consume from weather queue
-    with RabbitMQConsumer(json.loads(consumer_configTwo)) as consumer:
-        logger.info('Consume')
-        consumer.consume(resolve_messageWeather)
+        # consume from weather queue
+        logger.info('Consume weather')
+        x = consumer_two.consume()
+
+        #manipulate traffic
+        analysisTask = HelperClass()
+        data_traffic = analysisTask.decodeCsv(y)
+        dataframe_traffic = analysisTask.csvToDF(data_traffic)
+        logger.info('Traffic data prepared')
+
+        #manipulate weather
+        analysisTask = HelperClass()
+        data_weather = analysisTask.decodeCsv(x)
+        dataframe_weather = analysisTask.csvToDF(data_weather)
+        logger.info('Weather data prepared')
+
+        #do the join
+        task = TrafficWeatherMerge()
+        traffic_prep = task.traffic_dataPrep(dataframe_traffic)
+        weather_prep = task.weather_API_dataPrep(dataframe_weather)
+
+        task.mergeDatasetsNew(traffic_prep, weather_prep)
+        logger.info('Datasets have been merged on field data')
 
 
-def resolve_messageWeather(data):
-
-    task = TrafficWeatherJoinNew()
-    print(" [x] Receiving message %r")
-    analysisTask = HelperClass()
-    dataWeather = analysisTask.decodeCsv(data)
-    dfWeather = analysisTask.csvToDF(dataWeather)
-    weatherPrep_DF = task.weather_API_dataPrep(dfWeather)
-    print('Print DF: ')
-    print(weatherPrep_DF)
-    return weatherPrep_DF
-
-
-def resolve_messageTraffic(data):
-
-    task = TrafficWeatherJoinNew()
-    print(" [x] Receiving message %r")
-    analysisTask = HelperClass()
-    dataTraffic = analysisTask.decodeCsv(data)
-    dfTraffic = analysisTask.csvToDF(dataTraffic)
-    trafficPrep_DF = task.traffic_dataPrep(dfTraffic)
-    print('Print DF: ')
-    print(trafficPrep_DF)
-    return trafficPrep_DF
-
-# do not how to call this method
-def combineInputs(dfTraffic, dfWeather):
-
-    task = TrafficWeatherJoinNew()
-    task.mergeDatasetsNew(dfTraffic, dfWeather)
-
-main()
+if __name__ == "__main__":
+    main()
