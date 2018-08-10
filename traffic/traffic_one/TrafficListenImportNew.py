@@ -9,9 +9,13 @@ import traceback
 from watchdog.observers import Observer
 from watchdog.events import PatternMatchingEventHandler
 
-# the code was mostly taken from here:
-# http://brunorocha.org/python/watching-a-directory-for-file-changes-with-python.html?utm_content=bufferddcb9&utm_source=buffer&utm_medium=twitter&utm_campaign=Buffer
+# Some code for the class MyHandler and and main() method were taken from:
+# Bruno Rocha
+# Source: http://brunorocha.org/python/watching-a-directory-for-file-changes-with-python.html?utm_content=bufferddcb
+# 9&utm_source=buffer&utm_medium=twitter&utm_campaign=Buffer
+# 12/07/2013
 
+# Sets the logging configurations with logging.json file
 def setup_logging(
         default_path='./logging.json',
         default_level=logging.INFO):
@@ -26,27 +30,28 @@ def setup_logging(
     else:
         logging.basicConfig(level=default_level)
 
+# Class to perform some action on the event listened to by the observer
 class MyHandler(PatternMatchingEventHandler):
 
     # only check for .xml documents
     patterns = ["*.xml"]
 
+    # Processing of the newly created file
     def process(self, event):
-        # the file will be processed there
         try:
             print(event.scr_path, event.event_type)  # for controlling only
             logger.info('There was one newly created file')
-
+            # stores file input in a xml string
             with open(event.src_path, 'rb') as xml_source:
                 xml_string = xml_source.read()
-
+            # calls the producer and publishes the xml string
             producer.publish(xml_string)
             logger.info('Published Data to queue')
         except:
             logger.error('The newly created file could not be processed')
             raise
 
-    # only starts def process when "created" event occurred
+    # Only starts def process when "created" event is occurring
     def on_created(self, event):
         logger = logging.getLogger(__name__)
         try:
@@ -56,8 +61,9 @@ class MyHandler(PatternMatchingEventHandler):
             logger.error('Created event occurred but def process could not be started ')
             raise
 
+
+# Class to publish data to a RabbitMQ queue
 class RabbitMQProducer:
-    """ RabbitMQ Producer Implementation in Python"""
 
     def __init__(self, config):
         # Initialize the consumer with the available configs of rabbitMQ
@@ -93,9 +99,9 @@ class RabbitMQProducer:
 
 def main():
 
+    # Observer class to listen for changes
     newObserver = Observer()
-    print(os.listdir("/usr/src/app"))
-    # path of directory to look for needs to inserted in the command line
+    print(os.listdir("/usr/src/app")) # for controlling only
     newObserver.schedule(MyHandler(), path='/usr/src/app/output')
     #newObserver.schedule(MyHandler(), path='/Users/kim/MDMImporter/output')
 
@@ -110,12 +116,11 @@ def main():
     newObserver.join()
 
 
-#/MDMImporter/output'
-
 # =========================== Main start ======================================
 setup_logging()
 logger = logging.getLogger(__name__)
 
+# Configurations for producer
 producer_config = json.dumps({
     "exchangeName": "topic_data",
     "exchangeType": "direct",
@@ -124,6 +129,7 @@ producer_config = json.dumps({
 
 })
 
+# Initialise a new producer with its configuration
 producer = RabbitMQProducer(json.loads(producer_config))
 
 if __name__ == "__main__":

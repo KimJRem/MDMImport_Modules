@@ -8,6 +8,7 @@ import logging
 import logging.config
 
 
+# Sets the logging configurations with logging.json file
 def setup_logging(
         default_path='./logging.json',
         default_level=logging.INFO):
@@ -23,11 +24,11 @@ def setup_logging(
         logging.basicConfig(level=default_level)
 
 
+# Class to publish data to a RabbitMQ queue
 class RabbitMQProducer:
-    """ RabbitMQ Producer Implementation in Python"""
 
     def __init__(self, config):
-        # Initialize the consumer with the available configs of rabbitMQ
+        # Initialize the consumer with the available configs of RabbitMQ
         self.config = config
 
     def publish(self, message):
@@ -58,11 +59,11 @@ class RabbitMQProducer:
         parameters = pika.ConnectionParameters(host=self.config['host'])
         return pika.BlockingConnection(parameters)
 
+# Class to consume data from a RabbitMQ queue
 class RabbitMQConsumer:
-    """RabbitMQ Consumer Implementation in Python"""
 
     def __init__(self, config):
-        # Initialize the consumer with the available configs of rabbitMQ
+        # Initialize the consumer with the available configurations of RabbitMQ
         self.config = config
 
     def __enter__(self):
@@ -122,8 +123,11 @@ class RabbitMQConsumer:
         self.message_received_callback(body)
         channel.basic_ack(delivery_tag=method.delivery_tag)
 
+
+# Class to transform the traffic data from XML to JSON format
 class TrafficXmlToJsonNew:
 
+    # Function to transform the parkingArea XML files to several JSON files
     def xmlToJsonArea(self, file):
         try:
             d = xmltodict.parse(file)
@@ -133,8 +137,6 @@ class TrafficXmlToJsonNew:
                     'parkingFacilityTableStatusPublication']['parkingAreaStatus'][k]
                 b['SubscriptionID'] = 2683000
                 a = json.dumps(b, indent=4)
-                # print('This is one Json: ')
-                # print(a)
                 k = k + 1
                 yield a
             logger.info('xmlToJsonArea successfully completed')
@@ -142,6 +144,7 @@ class TrafficXmlToJsonNew:
             logger.info('Conversion to Json did not work')
             raise
 
+    # Function to transform the parkingFacility XML files to several JSON files
     def xmlToJsonFacility(self, file):
         try:
             d = xmltodict.parse(file)
@@ -151,8 +154,6 @@ class TrafficXmlToJsonNew:
                     'parkingFacilityTableStatusPublication']['parkingFacilityStatus'][k]
                 b['SubscriptionID'] = 2683000
                 a = json.dumps(b, indent=4)
-                # print('This is one Json: ')
-                # print(a)
                 k = k + 1
                 yield a
             logger.info('xmlToJsonFacility successfully completed')
@@ -160,10 +161,7 @@ class TrafficXmlToJsonNew:
             logger.info('Conversion to JSON did not work')
             raise
 
-            # consume from Queue
-            # turn Xml to JSON
-            # push them to Queue
-
+# Configurations for consumer
 consumer_config = json.dumps({
     "exchangeName": "topic_data",
     "host": "rabbitmq",
@@ -184,6 +182,7 @@ consumer_config = json.dumps({
     }
 })
 
+# Configurations for producer
 producer_config = json.dumps({
     "exchangeName": "topic_data",
     "exchangeType": "direct",
@@ -191,6 +190,7 @@ producer_config = json.dumps({
     "routingKey": "bc"
 
 })
+# Initialise a new producer with its configuration
 producer = RabbitMQProducer(json.loads(producer_config))
 
 setup_logging()
@@ -198,12 +198,13 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    # consume from Queue
+    # Consume from Queue
     with RabbitMQConsumer(json.loads(consumer_config)) as consumer:
         logger.info('Consume')
         consumer.consume(resolve_message)
 
 
+# Resolves the message consumed from the queue
 def resolve_message(data):
 
     print(" [x] Receiving message %r" % data)
@@ -214,7 +215,7 @@ def resolve_message(data):
     json_facilities = traffic_data_two.xmlToJsonFacility(data)
     logger.info('Converting xml files to json has been started..')
 
-    # push them to the Queue
+    # publishes all JSON files to the queue
     for i in json_area:
         producer.publish(i)
     for j in json_facilities:

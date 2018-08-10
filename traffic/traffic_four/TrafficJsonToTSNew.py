@@ -8,6 +8,7 @@ import logging
 import logging.config
 
 
+# Sets the logging configurations with logging.json file
 def setup_logging(
         default_path='./logging.json',
         default_level=logging.INFO):
@@ -23,11 +24,11 @@ def setup_logging(
         logging.basicConfig(level=default_level)
 
 
+# Class to publish data to a RabbitMQ queue
 class RabbitMQProducer:
-    """ RabbitMQ Producer Implementation in Python"""
 
     def __init__(self, config):
-        # Initialize the consumer with the available configs of rabbitMQ
+        # Initialize the consumer with the available configs of RabbitMQ
         self.config = config
 
     def publish(self, message):
@@ -59,6 +60,7 @@ class RabbitMQProducer:
         return pika.BlockingConnection(parameters)
 
 
+# Class to consume data from a RabbitMQ queue
 class RabbitMQConsumer:
     """RabbitMQ Consumer Implementation in Python"""
 
@@ -124,11 +126,10 @@ class RabbitMQConsumer:
         channel.basic_ack(delivery_tag=method.delivery_tag)
 
 
+# Class to transform the JSON into a JSON usable by the TimeSeries Manager
 class TrafficJsonToTSNew:
 
-
     def transformTS(self, data_object):
-
         x = flatten(data_object)
         firstkey = list(x.keys())[0]
         if firstkey == 'parkingAreaOccupancy':
@@ -147,6 +148,7 @@ class TrafficJsonToTSNew:
             return new_json
 
 
+# Configurations for consumer
 consumer_config = json.dumps({
     "exchangeName": "topic_datas",
     "host": "rabbitmq",
@@ -167,6 +169,7 @@ consumer_config = json.dumps({
     }
 })
 
+# Configurations for producer
 producer_config = json.dumps({
     "exchangeName": "topic_datas",
     "exchangeType": "direct",
@@ -174,7 +177,7 @@ producer_config = json.dumps({
     "routingKey": "de"
 
 })
-
+# Initialise a new producer with its configuration
 producer = RabbitMQProducer(json.loads(producer_config))
 
 setup_logging()
@@ -182,12 +185,13 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    # consume from Queue
+    # Consume from Queue
     with RabbitMQConsumer(json.loads(consumer_config)) as consumer:
         logger.info('Consume')
         consumer.consume(resolve_message)
 
 
+# Resolves the message consumed from the queue
 def resolve_message(data):
 
     print(" [x] Receiving message %r" % data)

@@ -9,10 +9,8 @@ import json
 import logging
 import logging.config
 
-# https://stackoverflow.com/questions/50813108/get-transferred-file-name-in-rabbitmq-using-python-pika
-# for transferring csv files
 
-
+# Sets the logging configurations with logging.json file
 def setup_logging(
         default_path='./logging.json',
         default_level=logging.INFO):
@@ -28,11 +26,11 @@ def setup_logging(
         logging.basicConfig(level=default_level)
 
 
+# Class to publish data to a RabbitMQ queue
 class RabbitMQProducer:
-    """ RabbitMQ Producer Implementation in Python"""
 
     def __init__(self, config):
-        # Initialize the consumer with the available configs of rabbitMQ
+        # Initialize the consumer with the available configs of RabbitMQ
         self.config = config
 
     def publish(self, message):
@@ -64,11 +62,11 @@ class RabbitMQProducer:
         return pika.BlockingConnection(parameters)
 
 
+# Class to consume data from a RabbitMQ queue
 class RabbitMQConsumer:
-    """RabbitMQ Consumer Implementation in Python"""
 
     def __init__(self, config):
-        # Initialize the consumer with the available configs of rabbitMQ
+        # Initialize the consumer with the available configs of RabbitMQ
         self.config = config
 
     def __enter__(self):
@@ -128,27 +126,28 @@ class RabbitMQConsumer:
         self.message_received_callback(body)
         channel.basic_ack(delivery_tag=method.delivery_tag)
 
+# Class with helping functions
 class HelperClass:
 
-    # get csv and store in DF
-
+    # Decode a csv file and return csv filename
     def decodeCsv(self, body):
         file_name = body.decode().split('.csv')[0]
         message = body.decode().split('.csv')[1]
         filename = '{}.csv'.format(file_name)
         with open(filename, 'w', encoding='utf-8') as write_csv:
-            # with open('{}.csv'.format(file_name), 'w') as write_csv:
             write_csv.write(message)
         return filename
 
+    # Transform csv into a pandas Dataframe
     def csvToDF(self, filename):
         df = pd.read_csv(filename, error_bad_lines=False)
         return df
 
 
+# Analysis class for the traffic data
 class TrafficFilterLargestNew:
 
-    # dataPrep = rename, used directly, other solution import the class
+    # Rename column names to more readable column names
     def renameColumns(self, dataframe):
         columnNames = list(dataframe.head(0))
         firstColumnName = columnNames[0]
@@ -175,11 +174,11 @@ class TrafficFilterLargestNew:
                          "totalParkingCapacityShortTermOverride": "ParkingCapacityShortTerm"})
             return dfFacility
 
-    # check for most popular parking space by occupancy, works before and after rename function has been applied
+    # Check for most popular parking space by occupancy rate
     def popularParkingbyID(self, df):
         columnNames = list(df.head(0))
         firstColumnName = columnNames[0]
-        # if statements so it works without renameColumns() function too
+        # ensures function works with and without renamed columns
         if firstColumnName == 'parkingAreaOccupancy':
             df_filter = df[firstColumnName].groupby(df['parkingAreaReference_@id']).mean()
             i = df_filter.nlargest(4)
@@ -198,6 +197,7 @@ class TrafficFilterLargestNew:
         return i
 
 
+# Configurations for consumer
 consumer_config = json.dumps({
     "exchangeName": "topic_data",
     "host": "rabbitmq",
@@ -222,12 +222,13 @@ setup_logging()
 logger = logging.getLogger(__name__)
 
 def main():
-    # consume from Queue
+    # Consume from Queue
     with RabbitMQConsumer(json.loads(consumer_config)) as consumer:
         logger.info('Consume')
         consumer.consume(resolve_message)
 
 
+# Resolves the message consumed from the queue
 def resolve_message(data):
 
     print(" [x] Receiving message %r" % data)

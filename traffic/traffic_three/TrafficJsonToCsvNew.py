@@ -8,10 +8,11 @@ import os
 import logging
 import logging.config
 
+# code snipped used for function getCsv()
+# Narbeh
+# Source: https://stackoverflow.com/questions/50813108/get-transferred-file-name-in-rabbitmq-using-python-pika
 
-# https://stackoverflow.com/questions/50813108/get-transferred-file-name-in-rabbitmq-using-python-pika
-# for transferring csv files
-
+# Sets the logging configurations with logging.json file
 def setup_logging(
         default_path='./logging.json',
         default_level=logging.INFO):
@@ -27,11 +28,11 @@ def setup_logging(
         logging.basicConfig(level=default_level)
 
 
+# Class to publish data to a RabbitMQ queue
 class RabbitMQProducer:
-    """ RabbitMQ Producer Implementation in Python"""
 
     def __init__(self, config):
-        # Initialize the consumer with the available configs of rabbitMQ
+        # Initialize the consumer with the available configs of RabbitMQ
         self.config = config
 
     def publish(self, message):
@@ -63,11 +64,11 @@ class RabbitMQProducer:
         return pika.BlockingConnection(parameters)
 
 
+# Class to consume data from a RabbitMQ queue
 class RabbitMQConsumer:
-    """RabbitMQ Consumer Implementation in Python"""
 
     def __init__(self, config):
-        # Initialize the consumer with the available configs of rabbitMQ
+        # Initialize the consumer with the available configs of RabbitMQ
         self.config = config
 
     def __enter__(self):
@@ -127,8 +128,10 @@ class RabbitMQConsumer:
         channel.basic_ack(delivery_tag=method.delivery_tag)
 
 
+# Class to transform JSON traffic data to a csv file
 class TrafficJsonToCsvNew:
 
+    # Function to transform the parkingArea JSON files into one csv file
     def JSONtoCsvArea(self, **data):
         logger = logging.getLogger(__name__)
         global filenameArea
@@ -139,11 +142,12 @@ class TrafficJsonToCsvNew:
             writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=headers)
             if fileEmpty:
                 logger.info('Header is written now')
-                writer.writeheader()  # file doesn't exist yet, write a header
+                writer.writeheader()  # if the file doesn't exist, write a header
             writer.writerow(data)
             logger.info('Received one set of data')
         csvfile.close()
 
+    # Function to transform the parkingArea JSON files into one csv file
     def JSONtoCsvFacility(self, **data):
         logger = logging.getLogger(__name__)
         global filenameFacility
@@ -159,16 +163,18 @@ class TrafficJsonToCsvNew:
             writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=headers)
             if fileEmpty:
                 logger.info('Header is written now')
-                writer.writeheader()
+                writer.writeheader()  # if the file doesn't exist, write a header
             writer.writerow(data)
             logger.info('Received one set of data')
         csvfile.close()
 
+    # Function to get a csv file with its name
     def getCsv(self, filename):
         with open(filename, 'rb') as csv_file:
             return filename + csv_file.read().decode()
 
 
+# Configurations for consumer
 consumer_config = json.dumps({
     "exchangeName": "topic_data",
     "host": "rabbitmq",
@@ -189,6 +195,7 @@ consumer_config = json.dumps({
     }
 })
 
+# Configurations for producer
 producer_config = json.dumps({
     "exchangeName": "topic_data",
     "exchangeType": "direct",
@@ -197,6 +204,7 @@ producer_config = json.dumps({
 
 })
 
+# Initialise a new producer with its configuration
 producer = RabbitMQProducer(json.loads(producer_config))
 
 setup_logging()
@@ -208,18 +216,20 @@ k = 0
 
 
 def main():
-    # consume from Queue
+    # Consume from Queue
     with RabbitMQConsumer(json.loads(consumer_config)) as consumer:
         logger.info('Consume')
         consumer.consume(resolve_message)
 
 
+# resolves the message consumed from the queue
 def resolve_message(data):
     print(" [x] Receiving message %r" % data)
 
     task = TrafficJsonToCsvNew()
     global k
 
+    # for the first 11 JSON files just store in csv
     if k < 11:
         json_data = json.loads(data)
         # a = task.byteify(json_data)
@@ -234,6 +244,7 @@ def resolve_message(data):
             task.JSONtoCsvFacility(**x)
             logger.info('Stored data in csvFacility')
         k = k + 1
+    # for the last JSON file store in csv and then call the csv to publish on queue
     else:
         json_data = json.loads(data)
         x = flatten(json_data)

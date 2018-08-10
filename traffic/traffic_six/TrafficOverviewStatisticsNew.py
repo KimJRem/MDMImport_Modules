@@ -10,9 +10,8 @@ import json
 import logging
 import logging.config
 
-# https://stackoverflow.com/questions/50813108/get-transferred-file-name-in-rabbitmq-using-python-pika
-# for transferring csv files
 
+# Sets the logging configurations with logging.json file
 def setup_logging(
         default_path='./logging.json',
         default_level=logging.INFO):
@@ -28,11 +27,11 @@ def setup_logging(
         logging.basicConfig(level=default_level)
 
 
+# Class to publish data to a RabbitMQ queue
 class RabbitMQProducer:
-    """ RabbitMQ Producer Implementation in Python"""
 
     def __init__(self, config):
-        # Initialize the consumer with the available configs of rabbitMQ
+        # Initialize the consumer with the available configs of RabbitMQ
         self.config = config
 
     def publish(self, message):
@@ -64,11 +63,11 @@ class RabbitMQProducer:
         return pika.BlockingConnection(parameters)
 
 
+# Class to consume data from a RabbitMQ queue
 class RabbitMQConsumer:
-    """RabbitMQ Consumer Implementation in Python"""
 
     def __init__(self, config):
-        # Initialize the consumer with the available configs of rabbitMQ
+        # Initialize the consumer with the available configs of RabbitMQ
         self.config = config
 
     def __enter__(self):
@@ -128,10 +127,11 @@ class RabbitMQConsumer:
         self.message_received_callback(body)
         channel.basic_ack(delivery_tag=method.delivery_tag)
 
+
+# Class with helping functions
 class HelperClass:
 
-    # get csv and store in DF
-
+    # Decode a csv file and return csv filename
     def decodeCsv(self, body):
         file_name = body.decode().split('.csv')[0]
         message = body.decode().split('.csv')[1]
@@ -140,14 +140,16 @@ class HelperClass:
             write_csv.write(message)
         return filename
 
+    # Transform csv into a pandas Dataframe
     def csvToDF(self, filename):
         df = pd.read_csv(filename, error_bad_lines=False)
         return df
 
 
+# Analysis class for the traffic data
 class TrafficOverviewStatisticsNew:
 
-    # dataPrep = rename
+    # Rename column names to more readable column names
     def renameColumns(self, dataframe):
         columnNames = list(dataframe.head(0))
         firstColumnName = columnNames[0]
@@ -174,13 +176,14 @@ class TrafficOverviewStatisticsNew:
                          "totalParkingCapacityShortTermOverride": "ParkingCapacityShortTerm"})
             return dfFacility
 
-    # do statistical operation
+    # Function to provide a statistical overview
     def ALL_describe(self, df):
-        # stats = df.describe()# make the code more flexible - automatically insert the name of the DF
+        # Only include columns with numbers in the overview
         stats = df.describe(include=[np.number])
         return stats
 
 
+# Configurations for consumer
 consumer_config = json.dumps({
     "exchangeName": "topic_data",
     "host": "rabbitmq",
@@ -206,12 +209,13 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    # consume from Queue
+    # Consume from Queue
     with RabbitMQConsumer(json.loads(consumer_config)) as consumer:
         logger.info('Consume')
         consumer.consume(resolve_message)
 
 
+# Resolves the message consumed from the queue
 def resolve_message(data):
 
     print(" [x] Receiving message %r" % data)
