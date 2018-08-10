@@ -1,3 +1,6 @@
+## @vtlvariable name="ModelHelper" type="org.mdbda.codegen.ModelHelper"
+## @vtlvariable name="model" type="org.mdbda.metamodel.Model"
+
 import threading
 import time
 import traceback
@@ -89,19 +92,48 @@ def main():
 
 
 # =========================== Main start ======================================
+#foreach($resource in ${ModelHelper.getAllResources($model)})
+#if($resource.instanceType == "weatherdata")
+#set($app_id = "")
+#set($city_id = "")
+#set($host = "")
+#set($routingKey = "")
+#foreach($instanceV in $resource.instanceVariables)
+#if($instanceV.key == "app_id")
+#set($app_id = $instanceV.value)
+#end
+#if($instanceV.key == "city_id")
+#set($city_id = $instanceV.value)
+#end
+#end
+#set($outgoingConnections = ${ModelHelper.getOutgoingConnections($model, $resource)})
+#foreach($outConn in $outgoingConnections)
+#foreach($instanceVariable in $outConn.instanceVariables)
+#if($instanceVariable.key == "host")
+#set($host = $instanceVariable.value)
+#end
+#if($instanceVariable.key == "topic")
+#set($routingKey = $instanceVariable.value)
+#end
+#end
+#end
 config = json.dumps({
     "exchangeName": "topic_datas",
-    "host": "rabbitmq",
+    "host": "$host",
     "exchangeType": "topic",
-    "routingKey": "12"
+    "routingKey": "$routingKey"
 
 })
 
+api = WeatherAPIClient("$app_id", "$city_id")
+#end
+#end
+
+producer = RabbitMQProducer(json.loads(config))
 setup_logging()
 logger = logging.getLogger(__name__)
 
-producer = RabbitMQProducer(json.loads(config))
-api = WeatherAPIClient('5e6a5233ba0c66d19549e001b75053f6', 2892518)
+
 
 if __name__ == "__main__":
     main()

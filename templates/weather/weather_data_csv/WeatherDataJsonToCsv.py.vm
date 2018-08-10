@@ -1,3 +1,6 @@
+## @vtlvariable name="ModelHelper" type="org.mdbda.codegen.ModelHelper"
+## @vtlvariable name="model" type="org.mdbda.metamodel.Model"
+
 import csv
 import json
 import logging
@@ -162,12 +165,40 @@ class WeatherDataJsonToCsv:
 # =========================== Main start ======================================
 
 
+#foreach($resource in ${ModelHelper.getAllResources($model)})
+#if($resource.instanceType == "weatherjsontocsv")
+#set($producer_host = "")
+#set($producer_routingKey= "")
+#set($consumer_host = "")
+#set($consumer_routingKey = "")
+
+#foreach($inConn in ${ModelHelper.getIncomingConnections($model, $resource)})
+#foreach($instanceVariable in $inConn.instanceVariables)
+#if($instanceVariable.key == "host")
+#set($consumer_host = $instanceVariable.value)
+#end
+#if($instanceVariable.key == "topic")
+#set($consumer_routingKey = $instanceVariable.value)
+#end
+#end
+#end
+
+#foreach($outConn in ${ModelHelper.getOutgoingConnections($model, $resource)})
+#foreach($instanceVariable in $outConn.instanceVariables)
+#if($instanceVariable.key == "host")
+#set($producer_host = $instanceVariable.value)
+#end
+#if($instanceVariable.key == "topic")
+#set($producer_routingKey = $instanceVariable.value)
+#end
+#end
+#end
 consumer_config = json.dumps({
     "exchangeName": "topic_datas",
-    "host": "rabbitmq",
-    "routingKey": "12",
+    "host": "$consumer_host",
+    "routingKey": "$consumer_routingKey",
     "exchangeType": "topic",
-    "queueName": "12",
+    "queueName": "$consumer_routingKey",
     "exchangeOptions": {
         "passive": False,
         "durable": False,
@@ -185,11 +216,13 @@ consumer_config = json.dumps({
 producer_config = json.dumps({
     "exchangeName": "topic_datas",
     "exchangeType": "topic",
-    "host": "rabbitmq",
-    "routingKey": "24"
+    "host": "$producer_host",
+    "routingKey": "$producer_routingKey"
 
 })
 producer = RabbitMQProducer(json.loads(producer_config))
+#end
+#end
 
 setup_logging()
 logger = logging.getLogger(__name__)

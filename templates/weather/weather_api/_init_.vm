@@ -1,0 +1,9 @@
+#set($SRC_ROOT = "weather_api")
+#set($NEW_DIR = $SRC_ROOT)
+#parse("mdbda.codegen.core:createDir")
+
+#parse("com.hahnpro.module.weather.api:dockerfile")
+#parse("com.hahnpro.module.weather.api:logging")
+#parse("com.hahnpro.module.weather.api:requirements")
+#parse("com.hahnpro.module.weather.api:wait")
+#parse("com.hahnpro.module.weather.api:app")

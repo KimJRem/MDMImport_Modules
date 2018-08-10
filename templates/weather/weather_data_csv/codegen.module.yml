@@ -1,0 +1,52 @@
+
+name: WeatherCSVModule
+id: com.hahnpro.module.weather.csv
+parent: com.hahnpro.module.weather
+templates:
+    -   id: init
+        file: _init_.vm
+
+    -   id: dockerfile
+        hooks:
+            -   hookClass: org.mdbda.codegen.hooks.NewFileHook
+                template: com.hahnpro.module.weather.csv:dockerfileTemplate
+                fileName: Dockerfile
+                dir: ./weather_data_csv
+    -   id: dockerfileTemplate
+        file: Dockerfile.vm
+
+    -   id: logging
+        hooks:
+            -   hookClass: org.mdbda.codegen.hooks.NewFileHook
+                template: com.hahnpro.module.weather.csv:loggingTemplate
+                fileName: logging.json
+                dir: ./weather_data_csv
+    -   id: loggingTemplate
+        file: logging.json.vm
+
+    -   id: requirements
+        hooks:
+            -   hookClass: org.mdbda.codegen.hooks.NewFileHook
+                template: com.hahnpro.module.weather.csv:requirementsTemplate
+                fileName: requirements.txt
+                dir: ./weather_data_csv
+    -   id: requirementsTemplate
+        file: requirements.txt.vm
+
+    -   id: wait
+        hooks:
+            -   hookClass: org.mdbda.codegen.hooks.NewFileHook
+                template: com.hahnpro.module.weather.csv:waitTemplate
+                fileName:  wait-for-it.sh
+                dir: ./weather_data_csv
+    -   id: waitTemplate
+        file: wait-for-it.sh.vm
+
+    -   id: app
+        hooks:
+            -   hookClass: org.mdbda.codegen.hooks.NewFileHook
+                template: com.hahnpro.module.weather.csv:appTemplate
+                fileName: WeatherDataJsonToCsv.py
+                dir: ./weather_data_csv
+    -   id: appTemplate
+        file: WeatherDataJsonToCsv.py.vm

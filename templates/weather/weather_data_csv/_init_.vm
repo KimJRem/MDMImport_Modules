@@ -1,0 +1,9 @@
+#set($SRC_ROOT = "weather_data_csv")
+#set($NEW_DIR = $SRC_ROOT)
+#parse("mdbda.codegen.core:createDir")
+
+#parse("com.hahnpro.module.weather.csv:dockerfile")
+#parse("com.hahnpro.module.weather.csv:logging")
+#parse("com.hahnpro.module.weather.csv:requirements")
+#parse("com.hahnpro.module.weather.csv:wait")
+#parse("com.hahnpro.module.weather.csv:app")
